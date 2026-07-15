@@ -518,7 +518,9 @@ a:focus-visible, button:focus-visible{
 .service-card-featured:hover{
   box-shadow:var(--shadow-lg), 0 0 0 1px rgba(255,255,255,0.4);
 }
-.service-card-featured h3, .service-card-featured p, .service-card-featured .service-link{ color:#fff; }
+.service-card.service-card-featured h3,
+.service-card.service-card-featured p,
+.service-card.service-card-featured .service-link{ color:#fff; }
 .service-card-featured .service-icon{ background:rgba(255,255,255,0.18); color:#fff; }
 
 .service-glow{
