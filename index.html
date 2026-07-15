@@ -22,6 +22,18 @@
 <!-- Grain / noise overlay for premium texture -->
 <div class="noise-overlay" aria-hidden="true"></div>
 
+<!-- ============ GROWTH RAIL (signature scroll indicator) ============ -->
+<nav class="scroll-rail" id="scrollRail" aria-label="Progresso da página">
+  <div class="scroll-rail-track">
+    <span class="scroll-rail-progress" id="railProgress"></span>
+    <button class="scroll-rail-mark" data-target="#inicio" style="top:0%" aria-label="Início"></button>
+    <button class="scroll-rail-mark" data-target="#servicos" aria-label="Serviços"></button>
+    <button class="scroll-rail-mark" data-target="#portfolio" aria-label="Portfólio"></button>
+    <button class="scroll-rail-mark" data-target="#processo" aria-label="Processo"></button>
+    <button class="scroll-rail-mark" data-target="#contato" style="top:100%" aria-label="Contato"></button>
+  </div>
+</nav>
+
 <!-- ============ HEADER ============ -->
 <header class="site-header" id="siteHeader">
   <div class="container header-inner">
@@ -72,7 +84,7 @@
       <div class="hero-copy" data-reveal="fade-up">
         <span class="eyebrow">Sites &amp; Landing Pages sob medida</span>
         <h1 class="hero-title">
-          Landing Pages e Sites que <span class="text-gradient">Geram Resultados</span>
+          Landing Pages e Sites que <span class="text-gradient hero-title-emphasis">Geram Resultados</span>
         </h1>
         <p class="hero-subtitle">
           Transformamos sua presença digital em uma ferramenta para atrair clientes, gerar autoridade e aumentar oportunidades de negócio.
@@ -163,16 +175,16 @@
       </div>
 
       <div class="benefits-grid">
-        <div class="benefit-card" data-reveal="fade-up" data-delay="0">
-          <div class="benefit-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+        <div class="benefit-card benefit-card--anchor" data-reveal="fade-up" data-delay="0">
+          <div class="benefit-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
           <h3>Mais Credibilidade</h3>
-          <p>Mostre profissionalismo para seus clientes.</p>
+          <p>Mostre profissionalismo para seus clientes desde o primeiro clique.</p>
         </div>
 
-        <div class="benefit-card" data-reveal="fade-up" data-delay="80">
-          <div class="benefit-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-4"/></svg></div>
+        <div class="benefit-card benefit-card--anchor" data-reveal="fade-up" data-delay="80">
+          <div class="benefit-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-4"/></svg></div>
           <h3>Mais Conversões</h3>
-          <p>Páginas pensadas para gerar contatos.</p>
+          <p>Páginas pensadas para transformar visitas em contatos reais.</p>
         </div>
 
         <div class="benefit-card" data-reveal="fade-up" data-delay="160">
