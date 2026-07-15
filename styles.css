@@ -658,7 +658,8 @@ a:focus-visible, button:focus-visible{
   .timeline-track{ top:0; bottom:0; left:27px; right:auto; width:2px; height:auto; }
   .timeline-progress{ width:2px; height:0%; top:0; }
   .timeline.in-view .timeline-progress{ height:100%; }
-  .timeline-step p{ max-width:none; }
+  .timeline-step h3{ margin-left:70px; margin-top:-40px; }
+  .timeline-step p{ max-width:none; margin-left:70px; }
 }
 
 /* ============================================================
