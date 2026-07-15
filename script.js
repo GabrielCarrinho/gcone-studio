@@ -191,51 +191,18 @@
   }
 
   /* ---------------------------------------------------------
-     Growth Rail — scroll progress + clickable section markers
+     Top scroll progress bar
   --------------------------------------------------------- */
-  const rail = document.getElementById('scrollRail');
-  const railProgress = document.getElementById('railProgress');
-
-  if (rail && railProgress) {
-    const marks = Array.from(rail.querySelectorAll('.scroll-rail-mark'));
-
-    const getMaxScroll = () => document.documentElement.scrollHeight - window.innerHeight;
-
-    const positionMarks = () => {
-      const maxScroll = getMaxScroll();
-      if (maxScroll <= 0) return;
-      marks.forEach(mark => {
-        const target = document.querySelector(mark.getAttribute('data-target'));
-        if (!target) return;
-        const pct = Math.min(100, Math.max(0, (target.offsetTop / maxScroll) * 100));
-        mark.style.top = pct + '%';
-      });
-    };
-
-    const updateRail = () => {
-      const maxScroll = getMaxScroll();
+  const progressFill = document.getElementById('scrollProgressFill');
+  if (progressFill) {
+    const updateProgress = () => {
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
       const pct = maxScroll > 0 ? Math.min(100, Math.max(0, (window.scrollY / maxScroll) * 100)) : 0;
-      railProgress.style.height = pct + '%';
-
-      marks.forEach(mark => {
-        const markPct = parseFloat(mark.style.top) || 0;
-        mark.classList.toggle('passed', pct + 0.5 >= markPct);
-      });
+      progressFill.style.width = pct + '%';
     };
-
-    positionMarks();
-    updateRail();
-    window.addEventListener('scroll', updateRail, { passive: true });
-    window.addEventListener('resize', () => { positionMarks(); updateRail(); });
-
-    marks.forEach(mark => {
-      mark.addEventListener('click', () => {
-        const target = document.querySelector(mark.getAttribute('data-target'));
-        if (!target) return;
-        const top = target.getBoundingClientRect().top + window.pageYOffset - 88;
-        window.scrollTo({ top, behavior: 'smooth' });
-      });
-    });
+    updateProgress();
+    window.addEventListener('scroll', updateProgress, { passive: true });
+    window.addEventListener('resize', updateProgress);
   }
 
   /* ---------------------------------------------------------
