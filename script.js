@@ -55,19 +55,25 @@
      Scroll reveal (fade-up / fade-in) with stagger delays
   --------------------------------------------------------- */
   const revealEls = document.querySelectorAll('[data-reveal]');
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const el = entry.target;
-        const delay = el.getAttribute('data-delay') || 0;
-        el.style.transitionDelay = `${delay}ms`;
-        el.classList.add('in-view');
-        revealObserver.unobserve(el);
-      }
-    });
-  }, { threshold: 0.15 });
 
-  revealEls.forEach(el => revealObserver.observe(el));
+  if (!('IntersectionObserver' in window)) {
+    // Old/unsupported browser: just show everything, don't risk hidden content
+    revealEls.forEach(el => el.classList.add('in-view'));
+  } else {
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const delay = el.getAttribute('data-delay') || 0;
+          el.style.transitionDelay = `${delay}ms`;
+          el.classList.add('in-view');
+          revealObserver.unobserve(el);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    revealEls.forEach(el => revealObserver.observe(el));
+  }
 
   /* ---------------------------------------------------------
      Animated counters (floating stat cards in hero)
@@ -183,4 +189,66 @@
       browserMock.style.transform = '';
     });
   }
+
+  /* ---------------------------------------------------------
+     Growth Rail — scroll progress + clickable section markers
+  --------------------------------------------------------- */
+  const rail = document.getElementById('scrollRail');
+  const railProgress = document.getElementById('railProgress');
+
+  if (rail && railProgress) {
+    const marks = Array.from(rail.querySelectorAll('.scroll-rail-mark'));
+
+    const getMaxScroll = () => document.documentElement.scrollHeight - window.innerHeight;
+
+    const positionMarks = () => {
+      const maxScroll = getMaxScroll();
+      if (maxScroll <= 0) return;
+      marks.forEach(mark => {
+        const target = document.querySelector(mark.getAttribute('data-target'));
+        if (!target) return;
+        const pct = Math.min(100, Math.max(0, (target.offsetTop / maxScroll) * 100));
+        mark.style.top = pct + '%';
+      });
+    };
+
+    const updateRail = () => {
+      const maxScroll = getMaxScroll();
+      const pct = maxScroll > 0 ? Math.min(100, Math.max(0, (window.scrollY / maxScroll) * 100)) : 0;
+      railProgress.style.height = pct + '%';
+
+      marks.forEach(mark => {
+        const markPct = parseFloat(mark.style.top) || 0;
+        mark.classList.toggle('passed', pct + 0.5 >= markPct);
+      });
+    };
+
+    positionMarks();
+    updateRail();
+    window.addEventListener('scroll', updateRail, { passive: true });
+    window.addEventListener('resize', () => { positionMarks(); updateRail(); });
+
+    marks.forEach(mark => {
+      mark.addEventListener('click', () => {
+        const target = document.querySelector(mark.getAttribute('data-target'));
+        if (!target) return;
+        const top = target.getBoundingClientRect().top + window.pageYOffset - 88;
+        window.scrollTo({ top, behavior: 'smooth' });
+      });
+    });
+  }
+
+  /* ---------------------------------------------------------
+     Card spotlight — soft glow that follows the cursor
+  --------------------------------------------------------- */
+  const spotlightCards = document.querySelectorAll(
+    '.benefit-card, .service-card, .diff-card, .testimonial-card'
+  );
+  spotlightCards.forEach(card => {
+    card.addEventListener('mousemove', (e) => {
+      const rect = card.getBoundingClientRect();
+      card.style.setProperty('--mx', (e.clientX - rect.left) + 'px');
+      card.style.setProperty('--my', (e.clientY - rect.top) + 'px');
+    });
+  });
 })();
