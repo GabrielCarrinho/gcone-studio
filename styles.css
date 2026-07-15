@@ -77,6 +77,46 @@ h1,h2,h3,h4{
 }
 
 /* ============================================================
+   Growth Rail — signature scroll progress indicator
+   (echoes the bar-chart mark inside the GC One icon: the rail
+   literally grows as the visitor moves through the page)
+============================================================ */
+.scroll-rail{
+  position:fixed; left:36px; top:50%; z-index:500;
+  transform:translateY(-50%);
+  height:220px; width:20px;
+  display:none;
+}
+.scroll-rail-track{
+  position:relative; margin:0 auto;
+  width:2px; height:100%;
+  background:#E2E7F0; border-radius:var(--radius-full);
+}
+.scroll-rail-progress{
+  position:absolute; left:0; bottom:0; width:100%; height:0%;
+  background:var(--gradient-brand-diag);
+  border-radius:var(--radius-full);
+  transition:height .1s linear;
+}
+.scroll-rail-mark{
+  position:absolute; left:50%; top:0;
+  width:9px; height:9px; margin-left:-4.5px; margin-top:-4.5px;
+  border-radius:50%; background:#fff;
+  border:2px solid #D8DEE9;
+  padding:0; cursor:pointer;
+  transition:border-color .4s var(--ease), background .4s var(--ease), transform .25s var(--ease);
+}
+.scroll-rail-mark:hover{ transform:scale(1.3); }
+.scroll-rail-mark.passed{
+  border-color:transparent;
+  background:var(--gradient-brand-diag);
+}
+
+@media(min-width:1240px){
+  .scroll-rail{ display:block; }
+}
+
+/* ============================================================
    Buttons
 ============================================================ */
 .btn{
@@ -242,13 +282,20 @@ h1,h2,h3,h4{
 }
 
 .hero-title{
-  font-size:clamp(2.4rem, 4.6vw, 3.85rem);
-  font-weight:800; line-height:1.08;
+  font-size:clamp(2.1rem, 3.6vw, 3rem);
+  font-weight:700; line-height:1.16;
   margin-bottom:22px;
 }
 .text-gradient{
   background:var(--gradient-brand-diag);
   -webkit-background-clip:text; background-clip:text; color:transparent;
+}
+.hero-title-emphasis{
+  display:block;
+  font-size:clamp(3.1rem, 6.2vw, 5.2rem);
+  font-weight:800; line-height:0.98;
+  letter-spacing:-0.03em;
+  margin-top:6px;
 }
 
 .hero-subtitle{
@@ -387,15 +434,31 @@ h1,h2,h3,h4{
 ============================================================ */
 .benefits{ background:var(--bg-soft); }
 .benefits-grid{
-  display:grid; grid-template-columns:repeat(3, 1fr); gap:28px;
+  display:grid; grid-template-columns:repeat(4, 1fr); gap:24px;
 }
-@media(max-width:900px){ .benefits-grid{ grid-template-columns:repeat(2,1fr); } }
-@media(max-width:560px){ .benefits-grid{ grid-template-columns:1fr; } }
+.benefit-card--anchor{ grid-column:span 2; }
+
+@media(max-width:900px){
+  .benefits-grid{ grid-template-columns:repeat(2,1fr); }
+  .benefit-card--anchor{ grid-column:span 2; }
+}
+@media(max-width:560px){
+  .benefits-grid{ grid-template-columns:1fr; }
+  .benefit-card--anchor{ grid-column:span 1; }
+}
 
 .benefit-card{
   background:#fff; border:1px solid #EEF1F6; border-radius:var(--radius-lg);
   padding:34px 28px; transition:transform .4s var(--ease), box-shadow .4s var(--ease), border-color .4s var(--ease);
 }
+.benefit-card--anchor{
+  padding:38px 34px;
+  background:linear-gradient(160deg, rgba(0,59,142,0.035), rgba(18,211,224,0.05));
+  border-color:rgba(0,103,168,0.16);
+}
+.benefit-card--anchor .benefit-icon{ width:58px; height:58px; }
+.benefit-card--anchor h3{ font-size:1.3rem; }
+.benefit-card--anchor p{ font-size:1rem; max-width:34ch; }
 .benefit-card:hover{
   transform:translateY(-6px);
   box-shadow:var(--shadow-md);
@@ -673,6 +736,30 @@ h1,h2,h3,h4{
 }
 
 /* ============================================================
+   Card spotlight — cursor-follow glow (benefit/service/diff/commitment cards)
+============================================================ */
+.benefit-card, .service-card, .diff-card, .testimonial-card{
+  position:relative; overflow:hidden;
+}
+.benefit-card::before, .service-card::before, .diff-card::before, .testimonial-card::before{
+  content:''; position:absolute; inset:0; z-index:0; pointer-events:none;
+  background:radial-gradient(280px circle at var(--mx,50%) var(--my,50%), rgba(18,211,224,0.14), transparent 70%);
+  opacity:0; transition:opacity .5s var(--ease);
+}
+.benefit-card:hover::before, .service-card:hover::before, .diff-card:hover::before, .testimonial-card:hover::before{
+  opacity:1;
+}
+.service-card-featured::before{
+  background:radial-gradient(280px circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,0.18), transparent 70%);
+}
+.benefit-card > *, .diff-card > *, .testimonial-card > *{
+  position:relative; z-index:1;
+}
+.service-card > *:not(.service-glow):not(.badge){
+  position:relative; z-index:1;
+}
+
+/* ============================================================
    Scroll reveal
 ============================================================ */
 [data-reveal]{
@@ -693,6 +780,7 @@ h1,h2,h3,h4{
 
   .hero{ padding:132px 0 64px; }
   .hero-title{ font-size:2.05rem; line-height:1.16; }
+  .hero-title-emphasis{ font-size:2.7rem; margin-top:2px; }
   .hero-subtitle{ font-size:1.02rem; margin-bottom:28px; }
   .hero-actions{ flex-direction:column; align-items:stretch; gap:12px; margin-bottom:32px; }
   .hero-actions .btn{ width:100%; }
@@ -720,4 +808,5 @@ h1,h2,h3,h4{
 @media(max-width:360px){
   .logo-img{ width:104px; }
   .hero-title{ font-size:1.85rem; }
+  .hero-title-emphasis{ font-size:2.3rem; }
 }
