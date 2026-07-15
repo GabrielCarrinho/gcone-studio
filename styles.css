@@ -704,6 +704,62 @@ a:focus-visible, button:focus-visible{
 .testimonial-card p{ color:var(--text-soft); font-size:0.92rem; line-height:1.6; margin:0; }
 
 /* ============================================================
+   Founder / Sobre
+============================================================ */
+.founder-inner{
+  display:grid; grid-template-columns:0.85fr 1.15fr; gap:64px; align-items:center;
+}
+
+.founder-visual{ display:flex; justify-content:center; }
+.founder-frame{
+  position:relative;
+  width:280px; aspect-ratio:1;
+}
+.founder-ring{
+  position:absolute; inset:-14px;
+  width:calc(100% + 28px); height:calc(100% + 28px);
+  max-width:none;
+}
+.founder-dots{
+  position:absolute; top:-22px; right:-26px;
+  width:64px; height:64px;
+  background-image:radial-gradient(var(--cyan) 1.6px, transparent 1.6px);
+  background-size:11px 11px;
+  opacity:0.55;
+  pointer-events:none;
+}
+.founder-photo-wrap{
+  position:absolute; inset:14px;
+  border-radius:50%; overflow:hidden;
+  background:var(--bg-soft);
+  box-shadow:var(--shadow-md);
+}
+.founder-photo{
+  width:100%; height:100%; object-fit:cover; object-position:center top;
+  display:block;
+}
+
+.founder-copy .founder-name{
+  font-family:var(--font-display); font-weight:700; font-size:1.3rem;
+  color:var(--text); margin:18px 0 2px;
+}
+.founder-copy .founder-role{
+  font-size:0.92rem; font-weight:600; color:var(--blue-petrol);
+  margin:0 0 18px;
+}
+.founder-copy .founder-bio{
+  color:var(--text-soft); font-size:1rem; line-height:1.7; max-width:52ch; margin:0;
+}
+
+@media(max-width:860px){
+  .founder-inner{ grid-template-columns:1fr; gap:36px; text-align:center; }
+  .founder-copy .founder-bio{ margin:0 auto; }
+}
+@media(max-width:480px){
+  .founder-frame{ width:220px; }
+}
+
+/* ============================================================
    FAQ / Accordion
 ============================================================ */
 .faq{ background:var(--bg-soft); }
