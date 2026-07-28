@@ -345,7 +345,7 @@ a:focus-visible, button:focus-visible{
 .laptop-stage-wrap{
   position:relative;
   width:100%;
-  aspect-ratio:16/11;
+  aspect-ratio:16/13.5;
   perspective:1400px;
 }
 
@@ -360,7 +360,7 @@ a:focus-visible, button:focus-visible{
 /* Fallback sits in the exact same spot; JS hides it once the 3D scene boots */
 .laptop-fallback.browser-mock{
   position:absolute; inset:0; margin:auto;
-  max-width:520px; max-height:340px;
+  max-width:640px; max-height:420px;
   animation:none;
   transform:perspective(1400px) rotateY(-8deg) rotateX(3deg);
 }
@@ -390,6 +390,12 @@ a:focus-visible, button:focus-visible{
   backface-visibility:hidden; -webkit-backface-visibility:hidden;
 }
 .laptop-screen-content .browser-body{ height:calc(100% - 41px); }
+.laptop-screen-shot{ padding:0 !important; overflow:hidden; }
+.laptop-screen-shot img{
+  width:100%; height:100%;
+  object-fit:cover; object-position:top center;
+  display:block;
+}
 
 /* ---- Chassis panels (lid back, keyboard deck, base bottom) ---- */
 .laptop-panel{
@@ -404,9 +410,9 @@ a:focus-visible, button:focus-visible{
   display:flex; align-items:center; justify-content:center;
 }
 .laptop-panel-mark{
-  width:34px; height:34px; border-radius:9px;
-  background:linear-gradient(135deg, var(--blue-deep), var(--cyan));
-  opacity:0.5;
+  width:auto; height:58px;
+  opacity:0.62;
+  filter:drop-shadow(0 1px 0 rgba(255,255,255,0.6)) drop-shadow(0 -1px 1px rgba(0,0,0,0.12));
 }
 .laptop-panel--base-top{
   background:linear-gradient(180deg, #DCE1E9, #C4CBD8);
@@ -438,7 +444,7 @@ a:focus-visible, button:focus-visible{
 }
 
 @media(max-width:1000px){
-  .laptop-stage-wrap{ aspect-ratio:16/12; }
+  .laptop-stage-wrap{ aspect-ratio:16/14; }
 }
 @media(prefers-reduced-motion: reduce){
   .laptop-drag-hint{ animation:none; opacity:1; }
