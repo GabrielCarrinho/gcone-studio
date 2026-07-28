@@ -109,21 +109,60 @@
   }
 
   /* ---------------------------------------------------------
-     Timeline progress fill on view
+     Timeline — scroll-scrubbed progress (GSAP ScrollTrigger)
   --------------------------------------------------------- */
-  const timeline = document.querySelector('.timeline');
-  const timelineProgress = document.getElementById('timelineProgress');
-  if (timeline && timelineProgress) {
-    const timelineObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          timeline.classList.add('in-view');
-          requestAnimationFrame(() => { timelineProgress.style.width = '100%'; });
-          timelineObserver.unobserve(timeline);
+  const timelineEl = document.querySelector('.timeline');
+  const timelineProgressEl = document.getElementById('timelineProgress');
+
+  if (timelineEl && timelineProgressEl) {
+    if (window.gsap && window.ScrollTrigger) {
+      gsap.registerPlugin(ScrollTrigger);
+      timelineEl.classList.add('in-view'); // icons/line use their lit-up styling throughout the scrub
+
+      gsap.fromTo(timelineProgressEl,
+        { '--fill': '0%' },
+        {
+          '--fill': '100%',
+          ease: 'none',
+          scrollTrigger: {
+            trigger: timelineEl,
+            start: 'top 78%',
+            end: 'bottom 62%',
+            scrub: 0.4
+          }
+        }
+      );
+    } else {
+      // Fallback: original one-shot reveal if GSAP failed to load
+      const timelineObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            timelineEl.classList.add('in-view');
+            requestAnimationFrame(() => { timelineProgressEl.style.setProperty('--fill', '100%'); });
+            timelineObserver.unobserve(timelineEl);
+          }
+        });
+      }, { threshold: 0.35 });
+      timelineObserver.observe(timelineEl);
+    }
+  }
+
+  /* ---------------------------------------------------------
+     Section mesh parallax (GSAP ScrollTrigger)
+  --------------------------------------------------------- */
+  if (window.gsap && window.ScrollTrigger) {
+    document.querySelectorAll('.section-mesh, .hero-mesh').forEach((mesh) => {
+      gsap.to(mesh, {
+        y: () => (mesh.classList.contains('hero-mesh') ? 60 : 50),
+        ease: 'none',
+        scrollTrigger: {
+          trigger: mesh.closest('.section, .hero'),
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 0.6
         }
       });
-    }, { threshold: 0.35 });
-    timelineObserver.observe(timeline);
+    });
   }
 
   /* ---------------------------------------------------------
@@ -203,6 +242,19 @@
     updateProgress();
     window.addEventListener('scroll', updateProgress, { passive: true });
     window.addEventListener('resize', updateProgress);
+  }
+
+  /* ---------------------------------------------------------
+     Keep ScrollTrigger positions accurate as async content
+     (fonts, images, the 3D laptop) settles into final layout
+  --------------------------------------------------------- */
+  if (window.gsap && window.ScrollTrigger) {
+    window.addEventListener('load', () => ScrollTrigger.refresh());
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => ScrollTrigger.refresh());
+    }
+    // The 3D laptop settles ~1.5s after it boots; nudge a refresh after its entrance tween
+    setTimeout(() => ScrollTrigger.refresh(), 2000);
   }
 
   /* ---------------------------------------------------------
