@@ -382,11 +382,10 @@ a:focus-visible, button:focus-visible{
 
 /* ---- Screen content (mounted inside the CSS3D scene) ---- */
 .laptop-screen-content{
+  position:relative;
   width:100%; height:100%;
   background:#fff;
-  border-radius:14px 14px 0 0;
   overflow:hidden;
-  box-shadow:0 0 0 8px #0B0F1A, 0 0 0 9px #262B35;
   backface-visibility:hidden; -webkit-backface-visibility:hidden;
 }
 .laptop-screen-content .browser-body{ height:calc(100% - 41px); }
@@ -396,51 +395,93 @@ a:focus-visible, button:focus-visible{
   object-fit:cover; object-position:top center;
   display:block;
 }
+.laptop-webcam{
+  position:absolute; top:5px; left:50%; transform:translateX(-50%);
+  width:5px; height:5px; border-radius:50%;
+  background:#050608;
+  box-shadow:0 0 0 1px rgba(255,255,255,0.06), inset 0 0 1px rgba(80,140,220,0.6);
+  z-index:3;
+}
+.laptop-screen-glass{
+  position:absolute; inset:0; pointer-events:none; z-index:2;
+  background:linear-gradient(115deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.02) 18%, transparent 32%, transparent 100%);
+}
 
-/* ---- Chassis panels (lid back, keyboard deck, base bottom) ---- */
+/* ---- Edge strips (real geometric thickness) ---- */
+.laptop-edge{
+  backface-visibility:hidden; -webkit-backface-visibility:hidden;
+  box-sizing:border-box;
+}
+
+/* ---- Chassis panel faces ---- */
 .laptop-panel{
   width:100%; height:100%;
   backface-visibility:hidden; -webkit-backface-visibility:hidden;
   box-sizing:border-box;
 }
 .laptop-panel--lid-back{
-  background:linear-gradient(155deg, #E7EBF2, #C9D1DE 55%, #B7C0D0);
-  border-radius:14px 14px 0 0;
-  box-shadow:0 0 0 8px #C9D1DE, 0 0 0 9px #AFB8C8, inset 0 0 40px rgba(255,255,255,0.4);
+  background:linear-gradient(150deg, #F0F2F6 0%, #DCE1E9 45%, #C9D1DE 75%, #BAC3D1 100%);
   display:flex; align-items:center; justify-content:center;
 }
 .laptop-panel-mark{
-  width:auto; height:58px;
-  opacity:0.62;
-  filter:drop-shadow(0 1px 0 rgba(255,255,255,0.6)) drop-shadow(0 -1px 1px rgba(0,0,0,0.12));
+  width:auto; height:56px;
+  opacity:0.7;
+  filter:drop-shadow(0 1px 0 rgba(255,255,255,0.7)) drop-shadow(0 -1px 1px rgba(0,0,0,0.14));
 }
 .laptop-panel--base-top{
-  background:linear-gradient(180deg, #DCE1E9, #C4CBD8);
-  border-radius:0 0 14px 14px;
-  box-shadow:0 0 0 8px #C4CBD8, 0 0 0 9px #AAB2C2;
-  padding:16px 22px;
+  background:linear-gradient(175deg, #E4E8EE 0%, #D2D8E1 40%, #C7CEDA 100%);
+  padding:14px 20px 18px;
   display:flex; align-items:center; justify-content:center;
 }
 .laptop-panel--base-bottom{
-  background:linear-gradient(180deg, #B7BECC, #9BA3B4);
-  border-radius:0 0 14px 14px;
-  box-shadow:0 0 0 8px #9BA3B4, 0 0 0 9px #838C9F;
+  background:linear-gradient(175deg, #C3CAD6 0%, #AEB6C6 55%, #9CA5B8 100%);
+  position:relative;
 }
+.laptop-vents{
+  position:absolute; left:50%; top:14%; transform:translateX(-50%);
+  width:46%; height:3px; border-radius:2px;
+  background:repeating-linear-gradient(90deg, #8992A5 0 4px, transparent 4px 8px);
+  opacity:0.5;
+}
+.laptop-foot{
+  position:absolute; width:34px; height:8px; border-radius:4px;
+  background:#6B7386; opacity:0.55;
+}
+.laptop-foot--l{ left:10%; bottom:8%; }
+.laptop-foot--r{ right:10%; bottom:8%; }
 
-.laptop-keyboard{ width:100%; height:100%; display:flex; flex-direction:column; gap:10px; }
+/* ---- Keyboard deck ---- */
+.laptop-keyboard{ width:100%; height:100%; display:flex; flex-direction:column; gap:9px; }
 .laptop-keys{
   flex:1;
-  border-radius:6px;
-  background:
-    repeating-linear-gradient(90deg, #A8B0C0 0 13px, #C4CBD8 13px 15px),
-    repeating-linear-gradient(0deg, #A8B0C0 0 10px, #C4CBD8 10px 12px);
-  opacity:0.7;
+  display:grid; grid-template-columns:repeat(14, 1fr); grid-template-rows:repeat(4, 1fr);
+  gap:3px;
+  padding:6px;
+  border-radius:8px;
+  background:rgba(0,0,0,0.05);
+}
+.laptop-key{
+  background:linear-gradient(175deg, #F4F6F9, #D7DCE5);
+  border-radius:2.5px;
+  box-shadow:0 1px 0 rgba(255,255,255,0.7) inset, 0 -1px 0 rgba(0,0,0,0.08) inset;
 }
 .laptop-trackpad{
-  height:34%; width:32%; margin:0 auto;
-  border-radius:6px;
-  background:rgba(255,255,255,0.35);
-  border:1px solid rgba(255,255,255,0.5);
+  height:38%; width:30%; margin:0 auto;
+  border-radius:7px;
+  background:linear-gradient(175deg, rgba(255,255,255,0.55), rgba(255,255,255,0.25));
+  border:1px solid rgba(255,255,255,0.6);
+  box-shadow:0 1px 3px rgba(0,0,0,0.06) inset;
+}
+
+/* ---- Hinge bar + contact shadow ---- */
+.laptop-hinge{
+  background:linear-gradient(180deg, #3A3F4B, #1B1E24);
+  border-radius:5px;
+  backface-visibility:hidden; -webkit-backface-visibility:hidden;
+}
+.laptop-contact-shadow{
+  background:radial-gradient(ellipse at center, rgba(10,20,40,0.28) 0%, rgba(10,20,40,0.12) 45%, transparent 72%);
+  backface-visibility:hidden; -webkit-backface-visibility:hidden;
 }
 
 @media(max-width:1000px){
