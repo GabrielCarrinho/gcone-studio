@@ -498,7 +498,7 @@ a:focus-visible, button:focus-visible{
   .laptop-stage-wrap{ aspect-ratio:16/14; }
 }
 @media(max-width:600px){
-  .laptop-stage-wrap{ aspect-ratio:16/16.5; }
+  .laptop-stage-wrap{ aspect-ratio:16/21; }
 }
 @media(prefers-reduced-motion: reduce){
   .laptop-drag-hint{ animation:none; opacity:1; }
