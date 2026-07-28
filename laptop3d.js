@@ -9,7 +9,7 @@ import * as THREE from 'three';
 import { CSS3DRenderer, CSS3DObject } from 'three/addons/renderers/CSS3DRenderer.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
-const REFERENCE_WIDTH = 640; // design reference width (css px) the scene was tuned at
+const REFERENCE_WIDTH = 500; // design reference width (css px) the scene was tuned at
 
 function initLaptop3D() {
   const stage = document.getElementById('laptop3DStage');
@@ -69,7 +69,7 @@ function initLaptop3D() {
   lidBackEl.className = 'laptop-panel laptop-panel--lid-back';
   lidBackEl.style.width = SCREEN_W + 'px';
   lidBackEl.style.height = SCREEN_H + 'px';
-  lidBackEl.innerHTML = '<span class="laptop-panel-mark"></span>';
+  lidBackEl.innerHTML = '<img class="laptop-panel-mark" src="assets/icon-watermark.png" alt="" />';
   const lidBackObject = new CSS3DObject(lidBackEl);
   lidBackObject.position.set(0, SCREEN_H / 2, 0);
   lidBackObject.rotation.y = Math.PI;
@@ -153,7 +153,7 @@ function initLaptop3D() {
     camera.updateProjectionMatrix();
     renderer.setSize(width, height);
 
-    const scale = THREE.MathUtils.clamp(width / REFERENCE_WIDTH, 0.55, 1.5);
+    const scale = THREE.MathUtils.clamp(width / REFERENCE_WIDTH, 0.6, 1.7);
     laptopGroup.scale.setScalar(scale);
   }
   resize();
@@ -167,7 +167,7 @@ function initLaptop3D() {
   --------------------------------------------------------- */
   laptopGroup.scale.multiplyScalar(0.001); // start collapsed; resize() above set the target scale
   const targetScale = laptopGroup.scale.length() ? laptopGroup.scale.x : 1;
-  const finalScale = THREE.MathUtils.clamp(stage.clientWidth / REFERENCE_WIDTH, 0.55, 1.5);
+  const finalScale = THREE.MathUtils.clamp(stage.clientWidth / REFERENCE_WIDTH, 0.6, 1.7);
   laptopGroup.scale.setScalar(finalScale * 0.001);
   laptopGroup.rotation.y += THREE.MathUtils.degToRad(50);
 
