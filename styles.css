@@ -497,6 +497,9 @@ a:focus-visible, button:focus-visible{
 @media(max-width:1000px){
   .laptop-stage-wrap{ aspect-ratio:16/14; }
 }
+@media(max-width:600px){
+  .laptop-stage-wrap{ aspect-ratio:16/16.5; }
+}
 @media(prefers-reduced-motion: reduce){
   .laptop-drag-hint{ animation:none; opacity:1; }
 }
@@ -793,26 +796,22 @@ a:focus-visible, button:focus-visible{
   display:flex; align-items:center; justify-content:center;
   width:56px; height:56px; border-radius:50%;
   background:#fff; border:2px solid #E5E9F0;
-  color:var(--text-soft);
+  color:var(--blue-deep);
   margin-bottom:22px;
-  transition:border-color .4s var(--ease), color .4s var(--ease), background .4s var(--ease), box-shadow .4s var(--ease);
+  transition:border-color .4s var(--ease), color .4s var(--ease), box-shadow .4s var(--ease);
 }
+.timeline-num svg{ width:24px; height:24px; }
 .timeline-num em{
-  position:absolute; top:-6px; right:-6px;
-  width:20px; height:20px; border-radius:50%;
-  display:flex; align-items:center; justify-content:center;
-  font-style:normal; font-family:var(--font-display); font-weight:700; font-size:0.68rem;
-  background:var(--bg-soft); border:2px solid #fff; color:var(--text-soft);
-  transition:background .4s var(--ease), color .4s var(--ease);
+  position:absolute; bottom:-8px; left:50%; transform:translateX(-50%);
+  font-style:normal; font-family:var(--font-display); font-weight:700; font-size:0.7rem;
+  color:#fff; background:var(--blue-deep);
+  width:19px; height:19px; line-height:19px; text-align:center;
+  border-radius:50%; box-sizing:border-box;
+  border:2px solid #fff;
 }
 .timeline.in-view .timeline-num{
-  border-color:transparent;
-  background:var(--gradient-brand-diag);
-  color:#fff;
-  box-shadow:0 8px 20px rgba(0,59,142,0.22);
-}
-.timeline.in-view .timeline-num em{
-  background:var(--blue-deep); color:#fff;
+  border-color:var(--cyan);
+  box-shadow:0 8px 20px rgba(0,59,142,0.18), 0 0 0 4px rgba(18,211,224,0.12);
 }
 .timeline-step h3{ font-size:1.1rem; font-weight:600; margin-bottom:6px; }
 .timeline-step p{ color:var(--text-soft); font-size:0.9rem; margin:0; line-height:1.55; max-width:26ch; }
