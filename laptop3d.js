@@ -251,7 +251,7 @@ function initLaptop3D() {
     camera.updateProjectionMatrix();
     renderer.setSize(width, height);
 
-    const scale = THREE.MathUtils.clamp(width / REFERENCE_WIDTH, 0.88, 1.7);
+    const scale = THREE.MathUtils.clamp(width / REFERENCE_WIDTH, 1.2, 1.9);
     laptopGroup.scale.setScalar(scale);
   }
   resize();
@@ -265,7 +265,7 @@ function initLaptop3D() {
   --------------------------------------------------------- */
   laptopGroup.scale.multiplyScalar(0.001); // start collapsed; resize() above set the target scale
   const targetScale = laptopGroup.scale.length() ? laptopGroup.scale.x : 1;
-  const finalScale = THREE.MathUtils.clamp(stage.clientWidth / REFERENCE_WIDTH, 0.88, 1.7);
+  const finalScale = THREE.MathUtils.clamp(stage.clientWidth / REFERENCE_WIDTH, 1.2, 1.9);
   laptopGroup.scale.setScalar(finalScale * 0.001);
   laptopGroup.rotation.y += THREE.MathUtils.degToRad(50);
 
