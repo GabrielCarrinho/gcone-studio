@@ -11,6 +11,65 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 const REFERENCE_WIDTH = 500; // design reference width (css px) the scene was tuned at
 
+/**
+ * Builds a thin rigid "slab" (front face + back face + connecting edge
+ * strips) so panels have real geometric thickness instead of being
+ * zero-depth planes. Built centered on its own local origin, front face
+ * facing local +Z — position/rotate the returned group as a single rigid
+ * unit to place it in the scene.
+ */
+function buildSlab({ width, height, thickness, frontEl, backEl, edgeColor, edges }) {
+  const group = new THREE.Group();
+
+  const front = new CSS3DObject(frontEl);
+  front.position.z = thickness / 2;
+  group.add(front);
+
+  if (backEl) {
+    const back = new CSS3DObject(backEl);
+    back.position.z = -thickness / 2;
+    back.rotation.y = Math.PI;
+    group.add(back);
+  }
+
+  const edgeSet = edges || ['top', 'bottom', 'left', 'right'];
+  const mkEdge = (w, h) => {
+    const el = document.createElement('div');
+    el.className = 'laptop-edge';
+    el.style.width = w + 'px';
+    el.style.height = h + 'px';
+    if (edgeColor) el.style.background = edgeColor;
+    return el;
+  };
+
+  if (edgeSet.includes('top')) {
+    const obj = new CSS3DObject(mkEdge(width, thickness));
+    obj.position.set(0, height / 2, 0);
+    obj.rotation.x = -Math.PI / 2;
+    group.add(obj);
+  }
+  if (edgeSet.includes('bottom')) {
+    const obj = new CSS3DObject(mkEdge(width, thickness));
+    obj.position.set(0, -height / 2, 0);
+    obj.rotation.x = Math.PI / 2;
+    group.add(obj);
+  }
+  if (edgeSet.includes('left')) {
+    const obj = new CSS3DObject(mkEdge(thickness, height));
+    obj.position.set(-width / 2, 0, 0);
+    obj.rotation.y = -Math.PI / 2;
+    group.add(obj);
+  }
+  if (edgeSet.includes('right')) {
+    const obj = new CSS3DObject(mkEdge(thickness, height));
+    obj.position.set(width / 2, 0, 0);
+    obj.rotation.y = Math.PI / 2;
+    group.add(obj);
+  }
+
+  return group;
+}
+
 function initLaptop3D() {
   const stage = document.getElementById('laptop3DStage');
   const fallback = document.getElementById('laptopFallback');
@@ -50,10 +109,13 @@ function initLaptop3D() {
 
   const SCREEN_W = 460;
   const SCREEN_H = 300;
+  const LID_THICKNESS = 11;
   const BASE_W = 460;
   const BASE_D = 300;
+  const BASE_THICKNESS = 20;
+  const ALU_EDGE = 'linear-gradient(180deg, #EEF1F6, #B9C1D0)';
 
-  // ---- Lid (screen front + branded back panel), hinged at bottom edge ----
+  // ---- Lid (screen front + branded back panel + edges), hinged at bottom ----
   const lidPivot = new THREE.Object3D();
   lidPivot.position.set(0, 0, 0);
   laptopGroup.add(lidPivot);
@@ -61,47 +123,83 @@ function initLaptop3D() {
   const screenEl = template.content.firstElementChild.cloneNode(true);
   screenEl.style.width = SCREEN_W + 'px';
   screenEl.style.height = SCREEN_H + 'px';
-  const screenObject = new CSS3DObject(screenEl);
-  screenObject.position.set(0, SCREEN_H / 2, 0);
-  lidPivot.add(screenObject);
 
   const lidBackEl = document.createElement('div');
   lidBackEl.className = 'laptop-panel laptop-panel--lid-back';
   lidBackEl.style.width = SCREEN_W + 'px';
   lidBackEl.style.height = SCREEN_H + 'px';
   lidBackEl.innerHTML = '<img class="laptop-panel-mark" src="assets/icon-watermark.png" alt="" />';
-  const lidBackObject = new CSS3DObject(lidBackEl);
-  lidBackObject.position.set(0, SCREEN_H / 2, 0);
-  lidBackObject.rotation.y = Math.PI;
-  lidPivot.add(lidBackObject);
+
+  const lidSlab = buildSlab({
+    width: SCREEN_W, height: SCREEN_H, thickness: LID_THICKNESS,
+    frontEl: screenEl, backEl: lidBackEl, edgeColor: '#15181F',
+    edges: ['top', 'left', 'right']
+  });
+  lidSlab.position.set(0, SCREEN_H / 2, 0);
+  lidPivot.add(lidSlab);
 
   // Open the lid to a natural "presenting" angle (small backward tilt from vertical)
   lidPivot.rotation.x = THREE.MathUtils.degToRad(-12);
 
-  // ---- Base (keyboard deck + bottom panel) ----
-  const baseEl = document.createElement('div');
-  baseEl.className = 'laptop-panel laptop-panel--base-top';
-  baseEl.style.width = BASE_W + 'px';
-  baseEl.style.height = BASE_D + 'px';
-  baseEl.innerHTML = `
+  // ---- Base (keyboard deck top + bottom + edges) ----
+  const baseTopEl = document.createElement('div');
+  baseTopEl.className = 'laptop-panel laptop-panel--base-top';
+  baseTopEl.style.width = BASE_W + 'px';
+  baseTopEl.style.height = BASE_D + 'px';
+  baseTopEl.innerHTML = `
     <div class="laptop-keyboard">
-      <div class="laptop-keys"></div>
+      <div class="laptop-keys" id="laptopKeys"></div>
       <div class="laptop-trackpad"></div>
     </div>
   `;
-  const baseObject = new CSS3DObject(baseEl);
-  baseObject.position.set(0, 0, BASE_D / 2);
-  baseObject.rotation.x = -Math.PI / 2;
-  laptopGroup.add(baseObject);
 
   const baseBottomEl = document.createElement('div');
   baseBottomEl.className = 'laptop-panel laptop-panel--base-bottom';
   baseBottomEl.style.width = BASE_W + 'px';
   baseBottomEl.style.height = BASE_D + 'px';
-  const baseBottomObject = new CSS3DObject(baseBottomEl);
-  baseBottomObject.position.set(0, 0, BASE_D / 2);
-  baseBottomObject.rotation.x = Math.PI / 2;
-  laptopGroup.add(baseBottomObject);
+  baseBottomEl.innerHTML = '<div class="laptop-vents"></div><div class="laptop-foot laptop-foot--l"></div><div class="laptop-foot laptop-foot--r"></div>';
+
+  const baseSlab = buildSlab({
+    width: BASE_W, height: BASE_D, thickness: BASE_THICKNESS,
+    frontEl: baseTopEl, backEl: baseBottomEl, edgeColor: ALU_EDGE,
+    edges: ['bottom', 'left', 'right']
+  });
+  baseSlab.rotation.x = -Math.PI / 2;
+  baseSlab.position.set(0, -BASE_THICKNESS / 2, BASE_D / 2);
+  laptopGroup.add(baseSlab);
+
+  // Generate individual keycaps (real grid instead of an abstract texture)
+  const keysContainer = baseTopEl.querySelector('#laptopKeys');
+  if (keysContainer) {
+    const cols = 14, rows = 4;
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const key = document.createElement('span');
+        key.className = 'laptop-key';
+        keysContainer.appendChild(key);
+      }
+    }
+  }
+
+  // ---- Hinge bar (static — does not rotate with the lid) ----
+  const hingeEl = document.createElement('div');
+  hingeEl.className = 'laptop-hinge';
+  hingeEl.style.width = (SCREEN_W - 40) + 'px';
+  hingeEl.style.height = '10px';
+  const hingeObject = new CSS3DObject(hingeEl);
+  hingeObject.position.set(0, -2, 4);
+  hingeObject.rotation.x = -Math.PI / 2;
+  laptopGroup.add(hingeObject);
+
+  // ---- Contact shadow beneath the laptop ----
+  const shadowEl = document.createElement('div');
+  shadowEl.className = 'laptop-contact-shadow';
+  shadowEl.style.width = (BASE_W + 140) + 'px';
+  shadowEl.style.height = (BASE_D + 100) + 'px';
+  const shadowObject = new CSS3DObject(shadowEl);
+  shadowObject.position.set(0, -BASE_THICKNESS - 4, BASE_D / 2);
+  shadowObject.rotation.x = -Math.PI / 2;
+  laptopGroup.add(shadowObject);
 
   // Tilt the whole assembly slightly for a pleasant resting presentation angle
   laptopGroup.rotation.x = THREE.MathUtils.degToRad(8);
