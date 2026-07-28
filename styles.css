@@ -339,6 +339,111 @@ a:focus-visible, button:focus-visible{
 .mock-cards{ display:flex; gap:12px; }
 .mock-card{ flex:1; height:56px; border-radius:10px; background:#F1F4FA; border:1px solid #E9EDF4; }
 
+/* ============================================================
+   Laptop 3D — interactive draggable laptop (CSS3DRenderer)
+============================================================ */
+.laptop-stage-wrap{
+  position:relative;
+  width:100%;
+  aspect-ratio:16/11;
+  perspective:1400px;
+}
+
+.laptop-3d-stage{
+  position:absolute; inset:0;
+  opacity:0;
+  transition:opacity .5s var(--ease);
+}
+.laptop-3d-stage.is-ready{ opacity:1; }
+.laptop-3d-stage > div{ overflow:visible !important; } /* CSS3DRenderer root */
+
+/* Fallback sits in the exact same spot; JS hides it once the 3D scene boots */
+.laptop-fallback.browser-mock{
+  position:absolute; inset:0; margin:auto;
+  max-width:520px; max-height:340px;
+  animation:none;
+  transform:perspective(1400px) rotateY(-8deg) rotateX(3deg);
+}
+
+.laptop-drag-hint{
+  position:absolute; left:50%; bottom:-6px; transform:translateX(-50%);
+  display:flex; align-items:center; gap:7px;
+  background:rgba(17,24,39,0.82); color:#fff;
+  font-size:0.76rem; font-weight:600;
+  padding:8px 16px; border-radius:var(--radius-full);
+  white-space:nowrap; pointer-events:none;
+  opacity:0; animation:hintFadeIn .6s var(--ease) 1.8s forwards;
+  transition:opacity .5s var(--ease);
+  z-index:5;
+}
+.laptop-drag-hint svg{ flex-shrink:0; opacity:0.85; }
+.laptop-drag-hint.is-hidden{ opacity:0 !important; }
+@keyframes hintFadeIn{ to{ opacity:1; } }
+
+/* ---- Screen content (mounted inside the CSS3D scene) ---- */
+.laptop-screen-content{
+  width:100%; height:100%;
+  background:#fff;
+  border-radius:14px 14px 0 0;
+  overflow:hidden;
+  box-shadow:0 0 0 8px #0B0F1A, 0 0 0 9px #262B35;
+  backface-visibility:hidden; -webkit-backface-visibility:hidden;
+}
+.laptop-screen-content .browser-body{ height:calc(100% - 41px); }
+
+/* ---- Chassis panels (lid back, keyboard deck, base bottom) ---- */
+.laptop-panel{
+  width:100%; height:100%;
+  backface-visibility:hidden; -webkit-backface-visibility:hidden;
+  box-sizing:border-box;
+}
+.laptop-panel--lid-back{
+  background:linear-gradient(155deg, #E7EBF2, #C9D1DE 55%, #B7C0D0);
+  border-radius:14px 14px 0 0;
+  box-shadow:0 0 0 8px #C9D1DE, 0 0 0 9px #AFB8C8, inset 0 0 40px rgba(255,255,255,0.4);
+  display:flex; align-items:center; justify-content:center;
+}
+.laptop-panel-mark{
+  width:34px; height:34px; border-radius:9px;
+  background:linear-gradient(135deg, var(--blue-deep), var(--cyan));
+  opacity:0.5;
+}
+.laptop-panel--base-top{
+  background:linear-gradient(180deg, #DCE1E9, #C4CBD8);
+  border-radius:0 0 14px 14px;
+  box-shadow:0 0 0 8px #C4CBD8, 0 0 0 9px #AAB2C2;
+  padding:16px 22px;
+  display:flex; align-items:center; justify-content:center;
+}
+.laptop-panel--base-bottom{
+  background:linear-gradient(180deg, #B7BECC, #9BA3B4);
+  border-radius:0 0 14px 14px;
+  box-shadow:0 0 0 8px #9BA3B4, 0 0 0 9px #838C9F;
+}
+
+.laptop-keyboard{ width:100%; height:100%; display:flex; flex-direction:column; gap:10px; }
+.laptop-keys{
+  flex:1;
+  border-radius:6px;
+  background:
+    repeating-linear-gradient(90deg, #A8B0C0 0 13px, #C4CBD8 13px 15px),
+    repeating-linear-gradient(0deg, #A8B0C0 0 10px, #C4CBD8 10px 12px);
+  opacity:0.7;
+}
+.laptop-trackpad{
+  height:34%; width:32%; margin:0 auto;
+  border-radius:6px;
+  background:rgba(255,255,255,0.35);
+  border:1px solid rgba(255,255,255,0.5);
+}
+
+@media(max-width:1000px){
+  .laptop-stage-wrap{ aspect-ratio:16/12; }
+}
+@media(prefers-reduced-motion: reduce){
+  .laptop-drag-hint{ animation:none; opacity:1; }
+}
+
 .float-card{
   position:absolute;
   display:flex; align-items:center; gap:10px;
@@ -620,9 +725,9 @@ a:focus-visible, button:focus-visible{
   position:absolute; top:27px; left:0; right:0; height:2px; background:#E5E9F0; z-index:0;
 }
 .timeline-progress{
-  position:absolute; left:0; top:0; height:100%; width:0%;
+  position:absolute; left:0; top:0; height:100%;
+  width:var(--fill, 0%);
   background:var(--gradient-brand-diag);
-  transition:width 1.4s var(--ease);
   box-shadow:0 0 12px rgba(18,211,224,0.5);
 }
 .timeline-step{ position:relative; z-index:1; }
@@ -658,8 +763,7 @@ a:focus-visible, button:focus-visible{
 @media(max-width:768px){
   .timeline{ grid-template-columns:1fr; gap:36px; }
   .timeline-track{ top:0; bottom:0; left:27px; right:auto; width:2px; height:auto; }
-  .timeline-progress{ width:2px; height:0%; top:0; }
-  .timeline.in-view .timeline-progress{ height:100%; }
+  .timeline-progress{ width:2px; height:var(--fill, 0%); top:0; }
   .timeline-step h3{ margin-left:70px; margin-top:-40px; }
   .timeline-step p{ max-width:none; margin-left:70px; }
 }
