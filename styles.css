@@ -384,11 +384,21 @@ a:focus-visible, button:focus-visible{
 .laptop-screen-content{
   position:relative;
   width:100%; height:100%;
-  background:#fff;
+  background:linear-gradient(155deg, #1B1D22, #0A0B0E);
+  padding:15px 9px 9px;
+  box-sizing:border-box;
   overflow:hidden;
   backface-visibility:hidden; -webkit-backface-visibility:hidden;
 }
-.laptop-screen-content .browser-body{ height:calc(100% - 41px); }
+.laptop-display{
+  position:relative;
+  width:100%; height:100%;
+  background:#fff;
+  border-radius:2px;
+  overflow:hidden;
+  box-shadow:0 0 0 1px rgba(0,0,0,0.4);
+}
+.laptop-display .browser-body{ height:calc(100% - 41px); }
 .laptop-screen-shot{ padding:0 !important; overflow:hidden; }
 .laptop-screen-shot img{
   width:100%; height:100%;
@@ -396,7 +406,7 @@ a:focus-visible, button:focus-visible{
   display:block;
 }
 .laptop-webcam{
-  position:absolute; top:5px; left:50%; transform:translateX(-50%);
+  position:absolute; top:6px; left:50%; transform:translateX(-50%);
   width:5px; height:5px; border-radius:50%;
   background:#050608;
   box-shadow:0 0 0 1px rgba(255,255,255,0.06), inset 0 0 1px rgba(80,140,220,0.6);
@@ -404,7 +414,7 @@ a:focus-visible, button:focus-visible{
 }
 .laptop-screen-glass{
   position:absolute; inset:0; pointer-events:none; z-index:2;
-  background:linear-gradient(115deg, rgba(255,255,255,0.10) 0%, rgba(255,255,255,0.02) 18%, transparent 32%, transparent 100%);
+  background:linear-gradient(115deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.015) 18%, transparent 32%, transparent 100%);
 }
 
 /* ---- Edge strips (real geometric thickness) ---- */
