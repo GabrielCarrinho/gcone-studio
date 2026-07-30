@@ -2,6 +2,35 @@
   'use strict';
 
   /* ---------------------------------------------------------
+     Hero title — reveal animation on load
+     (plain line: word-by-word stagger; gradient line: wipe reveal
+     via clip-path, since splitting a gradient-clip text into
+     per-character spans would break the single smooth gradient)
+  --------------------------------------------------------- */
+  const heroLine = document.getElementById('heroTitleLine');
+  const heroEmphasis = document.getElementById('heroTitleEmphasis');
+
+  if (heroLine && window.gsap) {
+    const words = heroLine.textContent.trim().split(' ');
+    heroLine.innerHTML = words
+      .map(w => `<span class="word-reveal"><span class="word-reveal-inner">${w}</span></span>`)
+      .join(' ');
+
+    gsap.set('.word-reveal-inner', { yPercent: 110, opacity: 0 });
+    if (heroEmphasis) gsap.set(heroEmphasis, { clipPath: 'inset(0 100% 0 0)' });
+
+    const tl = gsap.timeline({ delay: 0.25 });
+    tl.to('.word-reveal-inner', {
+      yPercent: 0, opacity: 1, duration: 0.75, ease: 'power3.out', stagger: 0.06
+    });
+    if (heroEmphasis) {
+      tl.to(heroEmphasis, {
+        clipPath: 'inset(0 0% 0 0)', duration: 0.7, ease: 'power3.inOut'
+      }, '-=0.35');
+    }
+  }
+
+  /* ---------------------------------------------------------
      Header: blur + shrink on scroll
   --------------------------------------------------------- */
   const header = document.getElementById('siteHeader');
@@ -258,16 +287,109 @@
   }
 
   /* ---------------------------------------------------------
-     Card spotlight — soft glow that follows the cursor
+     Card spotlight + subtle 3D tilt (desktop / fine-pointer only)
   --------------------------------------------------------- */
   const spotlightCards = document.querySelectorAll(
     '.benefit-card, .service-card, .diff-card, .testimonial-card'
   );
+  const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
   spotlightCards.forEach(card => {
+    let tiltX, tiltY, liftY;
+    if (window.gsap && canHover) {
+      tiltX = gsap.quickTo(card, 'rotationX', { duration: 0.5, ease: 'power3.out' });
+      tiltY = gsap.quickTo(card, 'rotationY', { duration: 0.5, ease: 'power3.out' });
+      liftY = gsap.quickTo(card, 'y', { duration: 0.5, ease: 'power3.out' });
+      gsap.set(card, { transformPerspective: 800, transformStyle: 'preserve-3d' });
+    }
+
     card.addEventListener('mousemove', (e) => {
       const rect = card.getBoundingClientRect();
-      card.style.setProperty('--mx', (e.clientX - rect.left) + 'px');
-      card.style.setProperty('--my', (e.clientY - rect.top) + 'px');
+      const mx = e.clientX - rect.left;
+      const my = e.clientY - rect.top;
+      card.style.setProperty('--mx', mx + 'px');
+      card.style.setProperty('--my', my + 'px');
+
+      if (tiltX && canHover) {
+        const px = (mx / rect.width) - 0.5;
+        const py = (my / rect.height) - 0.5;
+        tiltY(px * 6);
+        tiltX(py * -6);
+        liftY(-6);
+      }
+    });
+    card.addEventListener('mouseleave', () => {
+      if (tiltX && canHover) { tiltX(0); tiltY(0); liftY(0); }
     });
   });
+
+  /* ---------------------------------------------------------
+     Magnetic primary CTA buttons
+  --------------------------------------------------------- */
+  if (window.gsap && canHover) {
+    document.querySelectorAll('.btn-primary, .btn-white').forEach(btn => {
+      const moveX = gsap.quickTo(btn, 'x', { duration: 0.4, ease: 'power3.out' });
+      const moveY = gsap.quickTo(btn, 'y', { duration: 0.4, ease: 'power3.out' });
+      const radius = 60;
+
+      btn.addEventListener('mousemove', (e) => {
+        const rect = btn.getBoundingClientRect();
+        const cx = e.clientX - (rect.left + rect.width / 2);
+        const cy = e.clientY - (rect.top + rect.height / 2);
+        const dist = Math.sqrt(cx * cx + cy * cy);
+        if (dist < radius + rect.width / 2) {
+          moveX(cx * 0.25);
+          moveY(cy * 0.35);
+        }
+      });
+      btn.addEventListener('mouseleave', () => { moveX(0); moveY(0); });
+    });
+  }
+
+  /* ---------------------------------------------------------
+     Custom cursor (desktop / fine-pointer only)
+  --------------------------------------------------------- */
+  if (canHover) {
+    const dot = document.getElementById('cursorDot');
+    const ring = document.getElementById('cursorRing');
+
+    if (dot && ring) {
+      let dotMoveX, dotMoveY, ringMoveX, ringMoveY;
+      if (window.gsap) {
+        dotMoveX = gsap.quickTo(dot, 'x', { duration: 0.05, ease: 'none' });
+        dotMoveY = gsap.quickTo(dot, 'y', { duration: 0.05, ease: 'none' });
+        ringMoveX = gsap.quickTo(ring, 'x', { duration: 0.35, ease: 'power3.out' });
+        ringMoveY = gsap.quickTo(ring, 'y', { duration: 0.35, ease: 'power3.out' });
+      }
+
+      let started = false;
+      window.addEventListener('mousemove', (e) => {
+        if (!started) {
+          started = true;
+          dot.classList.add('is-active');
+          ring.classList.add('is-active');
+        }
+        if (window.gsap) {
+          dotMoveX(e.clientX); dotMoveY(e.clientY);
+          ringMoveX(e.clientX); ringMoveY(e.clientY);
+        } else {
+          dot.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+          ring.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
+        }
+      });
+
+      const hoverTargets = 'a, button, .btn, .accordion-trigger, .scroll-rail-mark';
+      document.querySelectorAll(hoverTargets).forEach(el => {
+        el.addEventListener('mouseenter', () => ring.classList.add('is-hover'));
+        el.addEventListener('mouseleave', () => ring.classList.remove('is-hover'));
+      });
+
+      document.addEventListener('mouseleave', () => {
+        dot.classList.remove('is-active'); ring.classList.remove('is-active');
+      });
+      document.addEventListener('mouseenter', () => {
+        dot.classList.add('is-active'); ring.classList.add('is-active');
+      });
+    }
+  }
 })();
