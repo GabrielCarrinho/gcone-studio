@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Solicitar Orçamento — GC One</title>
+<title>Solicitar Orçamento</title>
 <meta name="description" content="Conte sobre o seu negócio e o projeto que você precisa. Em menos de 1 minuto, geramos uma mensagem pronta para você solicitar seu orçamento pelo WhatsApp.">
 <link rel="canonical" href="https://gcone-studio.vercel.app/orcamento.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -115,8 +115,9 @@
               <button type="button" class="quote-pill">Advocacia</button>
               <button type="button" class="quote-pill">Consultoria</button>
               <button type="button" class="quote-pill">Comércio</button>
-              <button type="button" class="quote-pill">Outro</button>
+              <button type="button" class="quote-pill" data-other="true">Outro</button>
             </div>
+            <input type="text" id="qSegmentoOutro" class="quote-other-input" placeholder="Qual é o seu nicho?" style="display:none;">
           </div>
 
           <div class="quote-field">
@@ -171,12 +172,12 @@
           </div>
           <div class="quote-field-row">
             <div class="quote-field">
-              <label for="qEmail">E-mail <span>(opcional)</span></label>
-              <input type="email" id="qEmail" name="email" placeholder="seuemail@exemplo.com">
+              <label for="qEmail">E-mail</label>
+              <input type="email" id="qEmail" name="email" placeholder="seuemail@exemplo.com" required>
             </div>
             <div class="quote-field">
-              <label for="qTelefone">Telefone <span>(opcional)</span></label>
-              <input type="tel" id="qTelefone" name="telefone" placeholder="(00) 00000-0000">
+              <label for="qTelefone">Telefone</label>
+              <input type="tel" id="qTelefone" name="telefone" placeholder="(00) 00000-0000" required>
             </div>
           </div>
 
