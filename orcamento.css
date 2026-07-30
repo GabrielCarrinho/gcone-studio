@@ -1,0 +1,128 @@
+/* ============================================================
+   GC One — Orçamento (quote quiz page)
+   Reuses design tokens and components from styles.css
+   ============================================================ */
+
+.quote-hero{
+  position:relative; overflow:hidden;
+  padding:170px 0 60px;
+  text-align:center;
+}
+.quote-hero .container{ max-width:640px; }
+.quote-hero .eyebrow{ margin-bottom:18px; }
+.quote-hero h1{
+  font-family:var(--font-display); font-weight:800;
+  font-size:clamp(1.9rem, 3.4vw, 2.6rem);
+  line-height:1.15; letter-spacing:-0.02em;
+  margin:0 0 16px;
+}
+.quote-hero p{
+  color:var(--text-soft); font-size:1.05rem; line-height:1.6; margin:0;
+}
+
+.quote-form-section{ padding:20px 0 120px; }
+
+/* ---- Progress ---- */
+.quote-progress{ margin-bottom:48px; }
+.quote-progress-track{
+  height:4px; border-radius:var(--radius-full); background:#E5E9F0;
+  overflow:hidden; margin-bottom:14px;
+}
+.quote-progress-fill{
+  display:block; height:100%; width:33.33%;
+  background:var(--gradient-brand-diag);
+  transition:width .5s var(--ease);
+}
+.quote-progress-labels{ display:flex; justify-content:space-between; }
+.quote-step-label{
+  font-size:0.82rem; font-weight:600; color:var(--text-soft);
+  transition:color .3s var(--ease);
+}
+.quote-step-label.is-active{ color:var(--blue-deep); }
+.quote-step-label.is-done{ color:var(--blue-petrol); }
+
+/* ---- Form card ---- */
+.quote-form{
+  background:#fff; border:1px solid #EEF1F6; border-radius:var(--radius-lg);
+  padding:44px 44px 36px; box-shadow:var(--shadow-md);
+  position:relative; overflow:hidden;
+}
+.quote-step{ display:none; }
+.quote-step.is-active{ display:block; }
+.quote-step h2{
+  font-family:var(--font-display); font-weight:700; font-size:1.4rem;
+  margin:0 0 28px;
+}
+
+.quote-field{ margin-bottom:26px; }
+.quote-field label{
+  display:block; font-size:0.9rem; font-weight:600; color:var(--text);
+  margin-bottom:10px;
+}
+.quote-field label span{ font-weight:400; color:var(--text-soft); }
+.quote-field input{
+  width:100%; padding:13px 16px; font-family:var(--font-body); font-size:0.95rem;
+  border:1.5px solid #E5E9F0; border-radius:var(--radius-sm);
+  color:var(--text); background:var(--bg-soft);
+  transition:border-color .25s var(--ease), background .25s var(--ease);
+}
+.quote-field input:focus{
+  outline:none; border-color:var(--blue-petrol); background:#fff;
+}
+.quote-field-row{ display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+
+.quote-pills{ display:flex; flex-wrap:wrap; gap:10px; }
+.quote-pills--stack{ flex-direction:column; align-items:flex-start; }
+.quote-pills--stack .quote-pill{ width:100%; text-align:left; }
+.quote-pill{
+  padding:11px 20px; border-radius:var(--radius-full);
+  border:1.5px solid #E5E9F0; background:#fff;
+  font-family:var(--font-body); font-size:0.9rem; font-weight:500; color:var(--text);
+  transition:border-color .25s var(--ease), background .25s var(--ease), color .25s var(--ease);
+}
+.quote-pill:hover{ border-color:var(--blue-petrol); }
+.quote-pill.is-selected{
+  border-color:transparent;
+  background:var(--gradient-brand-diag);
+  color:#fff;
+}
+
+.quote-summary{
+  background:var(--bg-soft); border-radius:var(--radius-md);
+  padding:18px 20px; margin:6px 0 24px;
+  font-size:0.88rem; line-height:1.7; color:var(--text-soft);
+}
+.quote-summary strong{ color:var(--text); }
+.quote-summary.is-empty{ display:none; }
+
+.quote-whatsapp-btn{
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  width:100%; padding:16px 24px;
+  background:#25D366; color:#fff;
+  font-family:var(--font-body); font-weight:700; font-size:1rem;
+  border-radius:var(--radius-full);
+  box-shadow:0 10px 26px rgba(37,211,102,0.32);
+  transition:transform .3s var(--ease), box-shadow .3s var(--ease);
+}
+.quote-whatsapp-btn:hover{ transform:translateY(-2px); box-shadow:0 14px 32px rgba(37,211,102,0.4); }
+.quote-email-fallback{
+  display:block; text-align:center; margin-top:14px;
+  font-size:0.85rem; color:var(--text-soft); text-decoration:underline;
+  text-underline-offset:3px;
+}
+.quote-email-fallback:hover{ color:var(--blue-petrol); }
+
+.quote-nav{
+  display:flex; justify-content:space-between; align-items:center;
+  margin-top:8px; padding-top:28px; border-top:1px solid #EEF1F6;
+}
+.quote-nav .btn-ghost{ visibility:hidden; }
+.quote-nav .btn-ghost.is-visible{ visibility:visible; }
+#quoteNextBtn.is-hidden{ display:none; }
+
+@media(max-width:640px){
+  .quote-hero{ padding:150px 0 48px; }
+  .quote-form{ padding:32px 24px 28px; }
+  .quote-field-row{ grid-template-columns:1fr; gap:0; }
+  .quote-progress-labels{ font-size:0.75rem; }
+}
