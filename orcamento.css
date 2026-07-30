@@ -69,6 +69,8 @@
 .quote-field input:focus{
   outline:none; border-color:var(--blue-petrol); background:#fff;
 }
+.quote-other-input{ margin-top:12px; animation:otherFieldIn .3s var(--ease); }
+@keyframes otherFieldIn{ from{ opacity:0; transform:translateY(-6px); } to{ opacity:1; transform:translateY(0); } }
 .quote-field-row{ display:grid; grid-template-columns:1fr 1fr; gap:18px; }
 
 .quote-pills{ display:flex; flex-wrap:wrap; gap:10px; }
