@@ -37,22 +37,45 @@
   /* ---------------------------------------------------------
      Pill groups — single-select per field
   --------------------------------------------------------- */
+  const segmentoOutroInput = document.getElementById('qSegmentoOutro');
+
   form.querySelectorAll('.quote-pills').forEach(group => {
     const field = group.getAttribute('data-field');
     group.querySelectorAll('.quote-pill').forEach(pill => {
       pill.addEventListener('click', () => {
         const alreadySelected = pill.classList.contains('is-selected');
         group.querySelectorAll('.quote-pill').forEach(p => p.classList.remove('is-selected'));
+
         if (!alreadySelected) {
           pill.classList.add('is-selected');
           data[field] = pill.textContent.trim();
         } else {
           data[field] = '';
         }
+
+        // "Outro" niche field (segmento only)
+        if (segmentoOutroInput && field === 'segmento') {
+          const isOtherSelected = !alreadySelected && pill.hasAttribute('data-other');
+          segmentoOutroInput.style.display = isOtherSelected ? 'block' : 'none';
+          if (isOtherSelected) {
+            segmentoOutroInput.focus();
+            data.segmento = segmentoOutroInput.value.trim() || 'Outro';
+          } else if (!pill.hasAttribute('data-other')) {
+            segmentoOutroInput.value = '';
+          }
+        }
+
         updateSummaryAndLinks();
       });
     });
   });
+
+  if (segmentoOutroInput) {
+    segmentoOutroInput.addEventListener('input', () => {
+      data.segmento = segmentoOutroInput.value.trim();
+      updateSummaryAndLinks();
+    });
+  }
 
   /* ---------------------------------------------------------
      Step navigation
@@ -204,6 +227,28 @@
     div.textContent = str;
     return div.innerHTML;
   }
+
+  /* ---------------------------------------------------------
+     Required-field check before letting the person head to
+     WhatsApp or email — name, email and phone are essential
+     for us to actually get back to them.
+  --------------------------------------------------------- */
+  function validateContactStep() {
+    const nomeInput = document.getElementById('qNome');
+    const emailInput = document.getElementById('qEmail');
+    const telefoneInput = document.getElementById('qTelefone');
+
+    if (!data.nome) { nudge(nomeInput); return false; }
+    if (!data.email) { nudge(emailInput); return false; }
+    if (!data.telefone) { nudge(telefoneInput); return false; }
+    return true;
+  }
+
+  [waBtn, emailBtn].forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      if (!validateContactStep()) e.preventDefault();
+    });
+  });
 
   /* ---------------------------------------------------------
      Init
