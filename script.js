@@ -2,6 +2,22 @@
   'use strict';
 
   /* ---------------------------------------------------------
+     Page loader — hide once the page is ready, capped so a
+     slow connection never blocks the visitor for too long
+  --------------------------------------------------------- */
+  const pageLoader = document.getElementById('pageLoader');
+  if (pageLoader) {
+    let loaderDone = false;
+    const hideLoader = () => {
+      if (loaderDone) return;
+      loaderDone = true;
+      pageLoader.classList.add('is-done');
+    };
+    window.addEventListener('load', hideLoader);
+    setTimeout(hideLoader, 2200); // never block longer than this
+  }
+
+  /* ---------------------------------------------------------
      Hero title — reveal animation on load
      (plain line: word-by-word stagger; gradient line: wipe reveal
      via clip-path, since splitting a gradient-clip text into
@@ -226,8 +242,14 @@
   });
 
   /* ---------------------------------------------------------
-     Smooth-scroll offset correction for fixed header
+     Smooth-scroll to section — GSAP-eased with a brief
+     arrival highlight, falling back to native smooth-scroll
   --------------------------------------------------------- */
+  const hasScrollToPlugin = !!(window.gsap && typeof ScrollToPlugin !== 'undefined');
+  if (hasScrollToPlugin) {
+    gsap.registerPlugin(ScrollToPlugin);
+  }
+
   document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', (e) => {
       const targetId = anchor.getAttribute('href');
@@ -236,8 +258,25 @@
       if (!target) return;
       e.preventDefault();
       const offset = 88;
-      const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
-      window.scrollTo({ top, behavior: 'smooth' });
+
+      const flashTarget = target.querySelector('.section-head') || target;
+      const showArrival = () => {
+        flashTarget.classList.add('section-arrived');
+        setTimeout(() => flashTarget.classList.remove('section-arrived'), 900);
+      };
+
+      if (hasScrollToPlugin) {
+        gsap.to(window, {
+          duration: 1.1,
+          scrollTo: { y: target, offsetY: offset },
+          ease: 'power2.inOut',
+          onComplete: showArrival
+        });
+      } else {
+        const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+        window.scrollTo({ top, behavior: 'smooth' });
+        setTimeout(showArrival, 700);
+      }
     });
   });
 
