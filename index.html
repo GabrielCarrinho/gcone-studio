@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-
 <title>GC One — Landing Pages e Sites que Geram Resultados</title>
 <meta name="description" content="A GC One cria Landing Pages e Sites Institucionais modernos, rápidos e focados em conversão para pequenas empresas e profissionais autônomos.">
+<link rel="canonical" href="https://gcone-studio.vercel.app/">
 <meta name="google-site-verification" content="b1uOiVvRF-4LSTMhP9JwCRvfj3GRkGWB8X8Ekely4Tc" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -31,6 +31,10 @@
 
 <!-- Grain / noise overlay for premium texture -->
 <div class="noise-overlay" aria-hidden="true"></div>
+
+<!-- ============ CUSTOM CURSOR (desktop / fine-pointer only) ============ -->
+<div class="custom-cursor-dot" id="cursorDot" aria-hidden="true"></div>
+<div class="custom-cursor-ring" id="cursorRing" aria-hidden="true"></div>
 
 <!-- ============ TOP SCROLL PROGRESS BAR ============ -->
 <div class="scroll-progress" aria-hidden="true"><span id="scrollProgressFill"></span></div>
@@ -85,7 +89,7 @@
       <div class="hero-copy" data-reveal="fade-up">
         <span class="eyebrow">Sites &amp; Landing Pages sob medida</span>
         <h1 class="hero-title">
-          Landing Pages e Sites que <span class="text-gradient hero-title-emphasis">Geram Resultados</span>
+          <span id="heroTitleLine">Landing Pages e Sites que</span> <span class="text-gradient hero-title-emphasis" id="heroTitleEmphasis">Geram Resultados</span>
         </h1>
         <p class="hero-subtitle">
           Transformamos sua presença digital em uma ferramenta para atrair clientes, gerar autoridade e aumentar oportunidades de negócio.
