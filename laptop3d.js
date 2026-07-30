@@ -286,6 +286,49 @@ function initLaptop3D() {
   }
 
   /* ---------------------------------------------------------
+     URL bar typing effect (real DOM text — runs once on load)
+  --------------------------------------------------------- */
+  const urlEl = screenEl.querySelector('.browser-url');
+  if (urlEl) {
+    const fullText = urlEl.textContent.trim();
+    urlEl.textContent = '';
+    urlEl.classList.add('is-typing');
+    let i = 0;
+    const typeNext = () => {
+      if (i <= fullText.length) {
+        urlEl.textContent = fullText.slice(0, i);
+        i++;
+        setTimeout(typeNext, 45 + Math.random() * 45);
+      } else {
+        setTimeout(() => urlEl.classList.remove('is-typing'), 1200);
+      }
+    };
+    setTimeout(typeNext, 900); // let the entrance animation settle first
+  }
+
+  /* ---------------------------------------------------------
+     Scroll-linked rotation — the laptop settles into a new
+     angle as the visitor scrolls past the Hero. Stops for good
+     the moment the visitor takes manual control via drag.
+  --------------------------------------------------------- */
+  if (window.gsap && window.ScrollTrigger) {
+    const scrollTween = gsap.to(laptopGroup.rotation, {
+      y: THREE.MathUtils.degToRad(-18) + THREE.MathUtils.degToRad(30),
+      x: laptopGroup.rotation.x + THREE.MathUtils.degToRad(-5),
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '#inicio',
+        start: 'top top',
+        end: 'bottom top',
+        scrub: 0.6
+      }
+    });
+    controls.addEventListener('start', () => {
+      if (scrollTween.scrollTrigger) scrollTween.scrollTrigger.kill();
+    });
+  }
+
+  /* ---------------------------------------------------------
      Render loop
   --------------------------------------------------------- */
   function animate() {
