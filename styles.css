@@ -304,11 +304,17 @@ a:focus-visible, button:focus-visible{
 .hero-watermark{
   position:absolute; z-index:-1; pointer-events:none;
   top:-4%; right:-6%; width:46vw; max-width:620px; min-width:340px;
-  opacity:0.05;
-  mix-blend-mode:multiply;
+  aspect-ratio:829/428;
+  opacity:0.16;
   transform:rotate(-7deg);
+  background:var(--gradient-brand-diag);
+  -webkit-mask-image:url('assets/icon-watermark.png');
+  mask-image:url('assets/icon-watermark.png');
+  -webkit-mask-size:contain; mask-size:contain;
+  -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat;
+  -webkit-mask-position:center; mask-position:center;
 }
-.hero-watermark img{ width:100%; height:auto; display:block; }
+.hero-watermark img{ display:none; }
 
 .hero-inner{
   display:grid; grid-template-columns:0.85fr 1.15fr; gap:60px; align-items:center;
@@ -634,7 +640,7 @@ a:focus-visible, button:focus-visible{
   .browser-mock{ transform:none; animation:none; }
   .float-card, .float-chart{ display:none; }
   .hero{ padding:150px 0 80px; }
-  .hero-watermark{ width:70vw; top:-2%; right:-14%; opacity:0.045; }
+  .hero-watermark{ width:70vw; top:-2%; right:-14%; opacity:0.14; }
 }
 
 /* ============================================================
