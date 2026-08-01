@@ -42,10 +42,6 @@
 <!-- Grain / noise overlay for premium texture -->
 <div class="noise-overlay" aria-hidden="true"></div>
 
-<!-- ============ CUSTOM CURSOR (desktop / fine-pointer only) ============ -->
-<div class="custom-cursor-dot" id="cursorDot" aria-hidden="true"></div>
-<div class="custom-cursor-ring" id="cursorRing" aria-hidden="true"></div>
-
 <!-- ============ TOP SCROLL PROGRESS BAR ============ -->
 <div class="scroll-progress" aria-hidden="true"><span id="scrollProgressFill"></span></div>
 
@@ -61,9 +57,8 @@
         <span>Solicitar Orçamento</span>
       </a>
       <button class="menu-trigger" id="menuTrigger" aria-label="Abrir menu" aria-expanded="false" aria-controls="navOverlay">
-        <span class="menu-trigger-line"></span>
-        <span class="menu-trigger-line"></span>
-        <span class="menu-trigger-label">Menu</span>
+        <svg class="menu-trigger-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        <svg class="menu-trigger-icon menu-trigger-icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
   </div>
@@ -82,13 +77,44 @@
       </button>
     </div>
 
-    <nav class="nav-overlay-links">
-      <a href="#inicio" class="nav-overlay-link"><span class="nav-overlay-link-inner">Início</span></a>
-      <a href="#servicos" class="nav-overlay-link"><span class="nav-overlay-link-inner">Serviços</span></a>
-      <a href="#portfolio" class="nav-overlay-link"><span class="nav-overlay-link-inner">Portfólio</span></a>
-      <a href="#processo" class="nav-overlay-link"><span class="nav-overlay-link-inner">Processo</span></a>
-      <a href="#contato" class="nav-overlay-link"><span class="nav-overlay-link-inner">Contato</span></a>
-    </nav>
+    <div class="nav-overlay-body">
+      <nav class="nav-overlay-links">
+        <a href="#inicio" class="nav-overlay-link" data-desc="Volte para o topo e reveja a proposta da GC One.">
+          <span class="nav-overlay-link-index">01</span>
+          <span class="nav-overlay-link-inner">Início</span>
+        </a>
+        <a href="#servicos" class="nav-overlay-link" data-desc="Landing pages, sites institucionais e manutenção contínua.">
+          <span class="nav-overlay-link-index">02</span>
+          <span class="nav-overlay-link-inner">Serviços</span>
+        </a>
+        <a href="#portfolio" class="nav-overlay-link" data-desc="Veja o estudo de caso completo da CWA Engenharia.">
+          <span class="nav-overlay-link-index">03</span>
+          <span class="nav-overlay-link-inner">Portfólio</span>
+        </a>
+        <a href="#processo" class="nav-overlay-link" data-desc="Do briefing à entrega — como cada projeto acontece.">
+          <span class="nav-overlay-link-index">04</span>
+          <span class="nav-overlay-link-inner">Processo</span>
+        </a>
+        <a href="#contato" class="nav-overlay-link" data-desc="Fale direto com quem desenvolve o seu projeto.">
+          <span class="nav-overlay-link-index">05</span>
+          <span class="nav-overlay-link-inner">Contato</span>
+        </a>
+      </nav>
+
+      <div class="nav-overlay-preview">
+        <p class="nav-overlay-preview-desc" id="navPreviewDesc">Sites e landing pages sob medida, pensados para gerar resultado de verdade.</p>
+        <div class="nav-overlay-preview-meta">
+          <div class="nav-overlay-meta-item">
+            <span class="nav-overlay-meta-label">Local</span>
+            <span>São José dos Campos, SP</span>
+          </div>
+          <div class="nav-overlay-meta-item">
+            <span class="nav-overlay-meta-label">Horário local</span>
+            <span id="navOverlayClock">--:--</span>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div class="nav-overlay-footer">
       <a href="orcamento.html" class="btn btn-white">Solicitar Orçamento</a>
