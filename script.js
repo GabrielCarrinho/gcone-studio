@@ -211,6 +211,26 @@
   }
 
   /* ---------------------------------------------------------
+     Serviços — expandable list (single row open at a time)
+  --------------------------------------------------------- */
+  document.querySelectorAll('.service-row').forEach(row => {
+    const head = row.querySelector('.service-row-head');
+    head.addEventListener('click', () => {
+      const isOpen = row.classList.contains('is-open');
+
+      document.querySelectorAll('.service-row.is-open').forEach(other => {
+        if (other !== row) {
+          other.classList.remove('is-open');
+          other.querySelector('.service-row-head').setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      row.classList.toggle('is-open', !isOpen);
+      head.setAttribute('aria-expanded', String(!isOpen));
+    });
+  });
+
+  /* ---------------------------------------------------------
      FAQ accordion
   --------------------------------------------------------- */
   document.querySelectorAll('.accordion-item').forEach(item => {
@@ -329,7 +349,7 @@
      Card spotlight + subtle 3D tilt (desktop / fine-pointer only)
   --------------------------------------------------------- */
   const spotlightCards = document.querySelectorAll(
-    '.benefit-card, .service-card, .testimonial-card'
+    '.benefit-card'
   );
   const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
