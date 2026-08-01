@@ -44,33 +44,49 @@
       <img src="images/logo-transparent.png" alt="GC One" class="logo-img">
     </a>
 
-    <nav class="main-nav" id="mainNav">
-      <a href="index.html#inicio" class="nav-link">Início</a>
-      <a href="index.html#servicos" class="nav-link">Serviços</a>
-      <a href="index.html#portfolio" class="nav-link">Portfólio</a>
-      <a href="index.html#processo" class="nav-link">Processo</a>
-      <a href="index.html#contato" class="nav-link">Contato</a>
-    </nav>
-
     <div class="header-actions">
       <a href="https://wa.me/5512991415548" target="_blank" rel="noopener" class="btn btn-primary btn-sm">
         <span>Falar no WhatsApp</span>
       </a>
-      <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false">
-        <span></span><span></span><span></span>
+      <button class="menu-trigger" id="menuTrigger" aria-label="Abrir menu" aria-expanded="false" aria-controls="navOverlay">
+        <span class="menu-trigger-line"></span>
+        <span class="menu-trigger-line"></span>
+        <span class="menu-trigger-label">Menu</span>
       </button>
     </div>
   </div>
-
-  <div class="mobile-nav" id="mobileNav">
-    <a href="index.html#inicio" class="nav-link">Início</a>
-    <a href="index.html#servicos" class="nav-link">Serviços</a>
-    <a href="index.html#portfolio" class="nav-link">Portfólio</a>
-    <a href="index.html#processo" class="nav-link">Processo</a>
-    <a href="index.html#contato" class="nav-link">Contato</a>
-    <a href="https://wa.me/5512991415548" target="_blank" rel="noopener" class="btn btn-primary">Falar no WhatsApp</a>
-  </div>
 </header>
+
+<!-- ============ FULL-SCREEN NAV OVERLAY ============ -->
+<div class="nav-overlay" id="navOverlay" aria-hidden="true">
+  <div class="nav-overlay-mesh" aria-hidden="true"></div>
+  <div class="container nav-overlay-inner">
+    <div class="nav-overlay-top">
+      <a href="index.html" class="logo nav-overlay-logo">
+        <img src="images/logo-bw.png" alt="GC One" class="logo-img">
+      </a>
+      <button class="nav-overlay-close" id="navOverlayClose" aria-label="Fechar menu">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <nav class="nav-overlay-links">
+      <a href="index.html#inicio" class="nav-overlay-link"><span class="nav-overlay-link-inner">Início</span></a>
+      <a href="index.html#servicos" class="nav-overlay-link"><span class="nav-overlay-link-inner">Serviços</span></a>
+      <a href="index.html#portfolio" class="nav-overlay-link"><span class="nav-overlay-link-inner">Portfólio</span></a>
+      <a href="index.html#processo" class="nav-overlay-link"><span class="nav-overlay-link-inner">Processo</span></a>
+      <a href="index.html#contato" class="nav-overlay-link"><span class="nav-overlay-link-inner">Contato</span></a>
+    </nav>
+
+    <div class="nav-overlay-footer">
+      <a href="https://wa.me/5512991415548" target="_blank" rel="noopener" class="btn btn-white">Falar no WhatsApp</a>
+      <div class="nav-overlay-social">
+        <a href="https://wa.me/5512991415548" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="https://www.instagram.com/gcone.studio/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+  </div>
+</div>
 
 <main>
   <!-- ============ QUOTE HERO ============ -->
