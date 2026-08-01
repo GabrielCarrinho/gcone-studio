@@ -720,11 +720,14 @@ a:focus-visible, button:focus-visible{
   border-color:rgba(0,103,168,0.2);
 }
 .benefit-icon{
-  width:50px; height:50px; border-radius:14px;
-  display:flex; align-items:center; justify-content:center;
+  width:34px; height:34px;
   color:var(--blue-petrol);
-  background:linear-gradient(135deg, rgba(0,59,142,0.08), rgba(18,211,224,0.12));
-  margin-bottom:20px;
+  margin-bottom:16px;
+}
+.benefit-icon svg{ width:100%; height:100%; }
+.benefit-card h3::before{
+  content:''; display:block; width:30px; height:4px; border-radius:2px;
+  background:var(--gradient-brand-diag); margin-bottom:14px;
 }
 .benefit-card h3{ font-size:1.1rem; font-weight:600; margin-bottom:8px; }
 .benefit-card p{ color:var(--text-soft); font-size:0.95rem; line-height:1.6; margin:0; }
@@ -732,61 +735,67 @@ a:focus-visible, button:focus-visible{
 /* ============================================================
    Services
 ============================================================ */
-.services-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:28px; }
-@media(max-width:900px){ .services-grid{ grid-template-columns:1fr; } }
+.services-list{
+  border-top:1px solid #E5E9F0;
+}
+.service-row{ border-bottom:1px solid #E5E9F0; }
 
-.service-card{
-  position:relative; background:#fff;
-  border:1px solid #EEF1F6; border-radius:var(--radius-lg);
-  padding:40px 30px; overflow:hidden;
-  transition:transform .4s var(--ease), box-shadow .4s var(--ease), border-color .4s var(--ease);
+.service-row-head{
+  width:100%; display:flex; align-items:center; gap:18px;
+  padding:26px 4px; text-align:left;
+  transition:padding-left .3s var(--ease);
 }
-.service-card:hover{
-  box-shadow:var(--shadow-lg), 0 0 0 1px rgba(18,211,224,0.35);
-  border-color:rgba(0,103,168,0.3);
+.service-row-head:hover{ padding-left:10px; }
+.service-row-num{
+  font-family:var(--font-display); font-weight:700; font-size:0.95rem;
+  color:var(--text-soft); flex-shrink:0; width:24px;
 }
-.service-card-featured{
-  background:var(--gradient-brand);
-  color:#fff; border:none;
+.service-row-title{
+  font-family:var(--font-display); font-weight:700;
+  font-size:clamp(1.15rem, 2vw, 1.5rem); color:var(--text);
+  flex:1;
 }
-.service-card-featured:hover{
-  box-shadow:var(--shadow-lg), 0 0 0 1px rgba(255,255,255,0.4);
-}
-.service-card.service-card-featured h3,
-.service-card.service-card-featured p,
-.service-card.service-card-featured .service-link{ color:#fff; }
-.service-card-featured .service-icon{ background:rgba(255,255,255,0.18); color:#fff; }
-
-.service-glow{
-  position:absolute; top:-40%; right:-30%; width:220px; height:220px; border-radius:50%;
-  background:radial-gradient(circle, rgba(18,211,224,0.16), transparent 70%);
-  pointer-events:none;
-}
-.service-card-featured .service-glow{ background:radial-gradient(circle, rgba(255,255,255,0.22), transparent 70%); }
-
-.badge{
-  position:absolute; top:22px; right:22px;
-  font-size:0.7rem; font-weight:600; letter-spacing:0.04em;
-  background:rgba(255,255,255,0.2); color:#fff;
+.service-row-badge{
+  flex-shrink:0;
+  font-size:0.68rem; font-weight:600; letter-spacing:0.03em;
+  background:linear-gradient(135deg, rgba(0,59,142,0.1), rgba(18,211,224,0.14));
+  color:var(--blue-deep);
   padding:5px 12px; border-radius:var(--radius-full);
 }
-
-.service-icon{
-  width:56px; height:56px; border-radius:16px;
-  display:flex; align-items:center; justify-content:center;
-  color:var(--blue-deep);
-  background:linear-gradient(135deg, rgba(0,59,142,0.08), rgba(18,211,224,0.12));
-  margin-bottom:24px;
-  transition:transform .45s var(--ease);
+.service-row-chevron{
+  flex-shrink:0; color:var(--text-soft);
+  transition:transform .4s var(--ease), color .3s var(--ease);
 }
-.service-card:hover .service-icon{ transform:scale(1.08) rotate(-4deg); }
-.service-card h3{ font-size:1.25rem; font-weight:600; margin-bottom:10px; }
-.service-card p{ color:var(--text-soft); margin:0 0 20px; line-height:1.6; }
+.service-row.is-open .service-row-chevron{ transform:rotate(180deg); color:var(--blue-petrol); }
+.service-row.is-open .service-row-num,
+.service-row.is-open .service-row-title{ color:var(--blue-deep); }
+
+.service-row-body{
+  display:grid; grid-template-rows:0fr;
+  transition:grid-template-rows .45s var(--ease);
+}
+.service-row.is-open .service-row-body{ grid-template-rows:1fr; }
+.service-row-body-inner{ overflow:hidden; min-height:0; }
+.service-row-body-inner > *{
+  padding-left:42px;
+}
+.service-row-body-inner p{
+  color:var(--text-soft); font-size:0.98rem; line-height:1.65;
+  margin:0 0 16px; max-width:60ch; padding-bottom:2px;
+}
+.service-row-body-inner .service-link{ margin-bottom:28px; }
+
 .service-link{
   display:inline-flex; align-items:center; gap:6px; font-weight:600; font-size:0.9rem; color:var(--blue-petrol);
 }
 .service-link svg{ transition:transform .3s var(--ease); }
-.service-card:hover .service-link svg{ transform:translateX(4px); }
+.service-row-body-inner .service-link:hover svg{ transform:translateX(4px); }
+
+@media(max-width:600px){
+  .service-row-head{ gap:12px; padding:22px 2px; }
+  .service-row-badge{ display:none; }
+  .service-row-body-inner > *{ padding-left:0; }
+}
 
 /* ============================================================
    Portfolio — Case Study
@@ -930,25 +939,33 @@ a:focus-visible, button:focus-visible{
 }
 
 /* ============================================================
-   Compromisso (commitment cards)
+   Compromisso — asymmetric intro + inline items (no cards)
 ============================================================ */
-.testimonials-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:28px; }
-@media(max-width:900px){ .testimonials-grid{ grid-template-columns:1fr; max-width:520px; margin:0 auto; } }
+.commitment-inner{
+  display:grid; grid-template-columns:0.85fr 1.15fr; gap:64px; align-items:start;
+  position:relative; z-index:1;
+}
+.commitment-intro .eyebrow{ margin-bottom:18px; }
+.commitment-intro h2{
+  font-family:var(--font-display); font-weight:700;
+  font-size:clamp(1.7rem, 2.6vw, 2.2rem); line-height:1.25;
+  margin:0 0 16px;
+}
+.commitment-intro p{ color:var(--text-soft); font-size:1rem; line-height:1.65; margin:0; }
 
-.testimonial-card{
-  background:#fff; border:1px solid #EEF1F6; border-radius:var(--radius-lg);
-  padding:32px; transition:transform .4s var(--ease), box-shadow .4s var(--ease);
+.commitment-items{ display:flex; flex-direction:column; }
+.commitment-item{
+  display:flex; align-items:flex-start; gap:20px;
+  padding:24px 0; border-top:1px solid #E5E9F0;
 }
-.testimonial-card:hover{ box-shadow:var(--shadow-md); }
-.commitment-icon{
-  width:48px; height:48px; border-radius:14px;
-  display:flex; align-items:center; justify-content:center;
-  color:var(--blue-petrol);
-  background:linear-gradient(135deg, rgba(0,59,142,0.08), rgba(18,211,224,0.12));
-  margin-bottom:18px;
+.commitment-items .commitment-item:last-child{ border-bottom:1px solid #E5E9F0; }
+.commitment-item svg{ flex-shrink:0; color:var(--blue-petrol); margin-top:2px; }
+.commitment-item h3{ font-size:1.05rem; font-weight:600; margin:0 0 6px; }
+.commitment-item p{ color:var(--text-soft); font-size:0.92rem; line-height:1.6; margin:0; }
+
+@media(max-width:860px){
+  .commitment-inner{ grid-template-columns:1fr; gap:36px; }
 }
-.testimonial-card h3{ font-size:1.05rem; font-weight:600; margin-bottom:8px; }
-.testimonial-card p{ color:var(--text-soft); font-size:0.92rem; line-height:1.6; margin:0; }
 
 /* ============================================================
    FAQ / Accordion
@@ -1049,26 +1066,20 @@ a:focus-visible, button:focus-visible{
 }
 
 /* ============================================================
-   Card spotlight — cursor-follow glow (benefit/service/diff/commitment cards)
+   Card spotlight — cursor-follow glow (benefit cards)
 ============================================================ */
-.benefit-card, .service-card, .diff-card, .testimonial-card{
+.benefit-card{
   position:relative; overflow:hidden;
 }
-.benefit-card::before, .service-card::before, .diff-card::before, .testimonial-card::before{
+.benefit-card::before{
   content:''; position:absolute; inset:0; z-index:0; pointer-events:none;
   background:radial-gradient(280px circle at var(--mx,50%) var(--my,50%), rgba(18,211,224,0.14), transparent 70%);
   opacity:0; transition:opacity .5s var(--ease);
 }
-.benefit-card:hover::before, .service-card:hover::before, .diff-card:hover::before, .testimonial-card:hover::before{
+.benefit-card:hover::before{
   opacity:1;
 }
-.service-card-featured::before{
-  background:radial-gradient(280px circle at var(--mx,50%) var(--my,50%), rgba(255,255,255,0.18), transparent 70%);
-}
-.benefit-card > *, .diff-card > *, .testimonial-card > *{
-  position:relative; z-index:1;
-}
-.service-card > *:not(.service-glow):not(.badge){
+.benefit-card > *{
   position:relative; z-index:1;
 }
 
@@ -1105,8 +1116,7 @@ a:focus-visible, button:focus-visible{
   .section-head{ margin-bottom:44px; }
   .section-head h2{ font-size:1.6rem; }
 
-  .benefit-card, .diff-card, .testimonial-card{ padding:26px 22px; }
-  .service-card{ padding:32px 24px; }
+  .benefit-card{ padding:26px 22px; }
 
   .case-study-header{ padding:28px 22px 4px; }
   .case-study-header h3{ font-size:1.2rem; }
