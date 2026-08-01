@@ -58,43 +58,53 @@
   window.addEventListener('scroll', onScrollHeader, { passive: true });
 
   /* ---------------------------------------------------------
-     Active nav link based on section in view
+     Full-screen nav overlay
   --------------------------------------------------------- */
-  const navLinks = document.querySelectorAll('.main-nav .nav-link');
-  const sections = Array.from(navLinks)
-    .map(l => document.querySelector(l.getAttribute('href')))
-    .filter(Boolean);
+  const menuTrigger = document.getElementById('menuTrigger');
+  const navOverlay = document.getElementById('navOverlay');
+  const navOverlayClose = document.getElementById('navOverlayClose');
 
-  const navObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const id = '#' + entry.target.id;
-        navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === id));
+  if (menuTrigger && navOverlay) {
+    const overlayLinks = Array.from(navOverlay.querySelectorAll('.nav-overlay-link-inner'));
+
+    const openOverlay = () => {
+      navOverlay.classList.add('is-open');
+      navOverlay.setAttribute('aria-hidden', 'false');
+      menuTrigger.classList.add('is-active');
+      menuTrigger.setAttribute('aria-expanded', 'true');
+      document.body.style.overflow = 'hidden';
+
+      if (window.gsap) {
+        gsap.fromTo(overlayLinks,
+          { opacity: 0, y: 24 },
+          { opacity: 1, y: 0, duration: 0.55, ease: 'power3.out', stagger: 0.06, delay: 0.25 }
+        );
       }
+    };
+
+    const closeOverlay = () => {
+      navOverlay.classList.remove('is-open');
+      navOverlay.setAttribute('aria-hidden', 'true');
+      menuTrigger.classList.remove('is-active');
+      menuTrigger.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    };
+
+    menuTrigger.addEventListener('click', () => {
+      const isOpen = navOverlay.classList.contains('is-open');
+      isOpen ? closeOverlay() : openOverlay();
     });
-  }, { rootMargin: '-45% 0px -50% 0px' });
 
-  sections.forEach(s => navObserver.observe(s));
+    if (navOverlayClose) navOverlayClose.addEventListener('click', closeOverlay);
 
-  /* ---------------------------------------------------------
-     Mobile menu toggle
-  --------------------------------------------------------- */
-  const menuToggle = document.getElementById('menuToggle');
-  const mobileNav = document.getElementById('mobileNav');
-
-  menuToggle.addEventListener('click', () => {
-    const isOpen = mobileNav.classList.toggle('open');
-    menuToggle.classList.toggle('open', isOpen);
-    menuToggle.setAttribute('aria-expanded', String(isOpen));
-  });
-
-  mobileNav.querySelectorAll('a').forEach(a => {
-    a.addEventListener('click', () => {
-      mobileNav.classList.remove('open');
-      menuToggle.classList.remove('open');
-      menuToggle.setAttribute('aria-expanded', 'false');
+    navOverlay.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', closeOverlay);
     });
-  });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && navOverlay.classList.contains('is-open')) closeOverlay();
+    });
+  }
 
   /* ---------------------------------------------------------
      Scroll reveal (fade-up / fade-in) with stagger delays
@@ -437,7 +447,7 @@
         }
       });
 
-      const hoverTargets = 'a, button, .btn, .accordion-trigger, .scroll-rail-mark';
+      const hoverTargets = 'a, button, .btn, .accordion-trigger';
       document.querySelectorAll(hoverTargets).forEach(el => {
         el.addEventListener('mouseenter', () => ring.classList.add('is-hover'));
         el.addEventListener('mouseleave', () => ring.classList.remove('is-hover'));
