@@ -104,6 +104,32 @@
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape' && navOverlay.classList.contains('is-open')) closeOverlay();
     });
+
+    /* Preview panel — description swaps to match the hovered link */
+    const previewDesc = document.getElementById('navPreviewDesc');
+    const defaultDesc = previewDesc ? previewDesc.textContent : '';
+    if (previewDesc) {
+      navOverlay.querySelectorAll('.nav-overlay-link').forEach(link => {
+        link.addEventListener('mouseenter', () => {
+          previewDesc.textContent = link.getAttribute('data-desc') || defaultDesc;
+        });
+      });
+      navOverlay.querySelector('.nav-overlay-links').addEventListener('mouseleave', () => {
+        previewDesc.textContent = defaultDesc;
+      });
+    }
+
+    /* Live clock — São Paulo time, regardless of the visitor's own timezone */
+    const clockEl = document.getElementById('navOverlayClock');
+    if (clockEl) {
+      const updateClock = () => {
+        clockEl.textContent = new Date().toLocaleTimeString('pt-BR', {
+          timeZone: 'America/Sao_Paulo', hour: '2-digit', minute: '2-digit'
+        });
+      };
+      updateClock();
+      setInterval(updateClock, 30000);
+    }
   }
 
   /* ---------------------------------------------------------
@@ -449,52 +475,5 @@
       });
       btn.addEventListener('mouseleave', () => { moveX(0); moveY(0); });
     });
-  }
-
-  /* ---------------------------------------------------------
-     Custom cursor (desktop / fine-pointer only)
-  --------------------------------------------------------- */
-  if (canHover) {
-    const dot = document.getElementById('cursorDot');
-    const ring = document.getElementById('cursorRing');
-
-    if (dot && ring) {
-      let dotMoveX, dotMoveY, ringMoveX, ringMoveY;
-      if (window.gsap) {
-        dotMoveX = gsap.quickTo(dot, 'x', { duration: 0.05, ease: 'none' });
-        dotMoveY = gsap.quickTo(dot, 'y', { duration: 0.05, ease: 'none' });
-        ringMoveX = gsap.quickTo(ring, 'x', { duration: 0.35, ease: 'power3.out' });
-        ringMoveY = gsap.quickTo(ring, 'y', { duration: 0.35, ease: 'power3.out' });
-      }
-
-      let started = false;
-      window.addEventListener('mousemove', (e) => {
-        if (!started) {
-          started = true;
-          dot.classList.add('is-active');
-          ring.classList.add('is-active');
-        }
-        if (window.gsap) {
-          dotMoveX(e.clientX); dotMoveY(e.clientY);
-          ringMoveX(e.clientX); ringMoveY(e.clientY);
-        } else {
-          dot.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
-          ring.style.transform = `translate(${e.clientX}px, ${e.clientY}px)`;
-        }
-      });
-
-      const hoverTargets = 'a, button, .btn, .accordion-trigger';
-      document.querySelectorAll(hoverTargets).forEach(el => {
-        el.addEventListener('mouseenter', () => ring.classList.add('is-hover'));
-        el.addEventListener('mouseleave', () => ring.classList.remove('is-hover'));
-      });
-
-      document.addEventListener('mouseleave', () => {
-        dot.classList.remove('is-active'); ring.classList.remove('is-active');
-      });
-      document.addEventListener('mouseenter', () => {
-        dot.classList.add('is-active'); ring.classList.add('is-active');
-      });
-    }
   }
 })();
