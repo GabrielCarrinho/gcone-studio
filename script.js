@@ -329,7 +329,7 @@
      Card spotlight + subtle 3D tilt (desktop / fine-pointer only)
   --------------------------------------------------------- */
   const spotlightCards = document.querySelectorAll(
-    '.benefit-card, .service-card, .diff-card, .testimonial-card'
+    '.benefit-card, .service-card, .testimonial-card'
   );
   const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
