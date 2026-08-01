@@ -118,35 +118,6 @@ a:focus-visible, button:focus-visible{
 }
 
 /* ============================================================
-   Custom cursor — desktop / fine-pointer devices only.
-   Mobile and touch devices keep the normal system cursor.
-============================================================ */
-@media (hover: hover) and (pointer: fine){
-  a, button, .btn, .accordion-trigger, .scroll-rail-mark{ cursor:none; }
-
-  .custom-cursor-dot{
-    position:fixed; top:0; left:0; z-index:9998; pointer-events:none;
-    width:7px; height:7px; margin:-3.5px 0 0 -3.5px;
-    border-radius:50%; background:var(--blue-deep);
-    opacity:0; transition:opacity .3s var(--ease);
-  }
-  .custom-cursor-ring{
-    position:fixed; top:0; left:0; z-index:9998; pointer-events:none;
-    width:34px; height:34px; margin:-17px 0 0 -17px;
-    border-radius:50%; border:1.5px solid rgba(0,59,142,0.32);
-    opacity:0; transition:opacity .3s var(--ease), width .25s var(--ease), height .25s var(--ease), margin .25s var(--ease), border-color .25s var(--ease), background .25s var(--ease);
-  }
-  .custom-cursor-dot.is-active, .custom-cursor-ring.is-active{ opacity:1; }
-  .custom-cursor-ring.is-hover{
-    width:56px; height:56px; margin:-28px 0 0 -28px;
-    background:rgba(18,211,224,0.10); border-color:var(--cyan);
-  }
-}
-@media not all and (hover:hover){
-  .custom-cursor-dot, .custom-cursor-ring{ display:none; }
-}
-
-/* ============================================================
    Top scroll progress bar — replaces the old vertical rail
 ============================================================ */
 .scroll-progress{
@@ -234,29 +205,27 @@ a:focus-visible, button:focus-visible{
 
 .header-actions{ display:flex; align-items:center; gap:16px; }
 
-/* ---- Menu trigger — visible at every screen size ---- */
+/* ---- Menu trigger — traditional hamburger icon, visible at every screen size ---- */
 .menu-trigger{
-  display:flex; align-items:center; gap:10px;
-  padding:8px 6px;
+  position:relative;
+  display:flex; align-items:center; justify-content:center;
+  width:44px; height:44px;
+  color:var(--text);
+  transition:color .3s var(--ease);
 }
-.menu-trigger-line{
-  display:block; width:22px; height:2px; background:var(--text); border-radius:1px;
-  transition:transform .35s var(--ease), opacity .3s var(--ease), background .3s var(--ease);
+.menu-trigger:hover{ color:var(--blue-petrol); }
+.menu-trigger-icon{
+  position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  transition:opacity .3s var(--ease), transform .35s var(--ease);
 }
-.menu-trigger-line:nth-child(2){ width:15px; align-self:flex-end; }
-.menu-trigger{ flex-direction:row-reverse; }
-.menu-trigger .menu-trigger-line + .menu-trigger-line{ margin-right:5px; }
-.menu-trigger-label{
-  font-size:0.85rem; font-weight:600; color:var(--text);
-  transition:opacity .3s var(--ease);
-}
-.menu-trigger:hover .menu-trigger-line{ background:var(--blue-petrol); }
+.menu-trigger-icon-close{ opacity:0; transform:translate(-50%,-50%) rotate(-45deg); }
 
-/* When the overlay is open, morph the two lines into an X and hide the label */
-.menu-trigger.is-active .menu-trigger-line:nth-child(2){ width:22px; }
-.menu-trigger.is-active .menu-trigger-line:first-child{ transform:translateY(3.5px) rotate(45deg); }
-.menu-trigger.is-active .menu-trigger-line:nth-child(2){ transform:translateY(-3.5px) rotate(-45deg); }
-.menu-trigger.is-active .menu-trigger-label{ opacity:0; }
+.menu-trigger.is-active .menu-trigger-icon:not(.menu-trigger-icon-close){
+  opacity:0; transform:translate(-50%,-50%) rotate(45deg);
+}
+.menu-trigger.is-active .menu-trigger-icon-close{
+  opacity:1; transform:translate(-50%,-50%) rotate(0deg);
+}
 
 /* ============================================================
    Full-screen navigation overlay
@@ -265,10 +234,15 @@ a:focus-visible, button:focus-visible{
   position:fixed; inset:0; z-index:2000;
   background:linear-gradient(155deg, #04122E 0%, #003B8E 65%, #045C8C 100%);
   clip-path:circle(2% at calc(100% - 44px) 40px);
-  transition:clip-path .7s cubic-bezier(.65,0,.35,1);
+  transition:clip-path .7s cubic-bezier(.65,0,.35,1), visibility 0s linear .7s;
   overflow:hidden;
+  visibility:hidden; pointer-events:none;
 }
-.nav-overlay.is-open{ clip-path:circle(150% at calc(100% - 44px) 40px); }
+.nav-overlay.is-open{
+  clip-path:circle(150% at calc(100% - 44px) 40px);
+  visibility:visible; pointer-events:auto;
+  transition:clip-path .7s cubic-bezier(.65,0,.35,1), visibility 0s linear 0s;
+}
 
 .nav-overlay-mesh{
   position:absolute; inset:0; pointer-events:none;
@@ -294,23 +268,54 @@ a:focus-visible, button:focus-visible{
 }
 .nav-overlay-close:hover{ transform:rotate(90deg); background:rgba(255,255,255,0.1); }
 
-.nav-overlay-links{
-  flex:1; display:flex; flex-direction:column; justify-content:center;
-  gap:6px;
+.nav-overlay-body{
+  flex:1; display:flex; align-items:center; gap:60px;
 }
-.nav-overlay-link{ overflow:hidden; }
+
+.nav-overlay-links{
+  display:flex; flex-direction:column; justify-content:center;
+  gap:4px; flex:1.3;
+}
+.nav-overlay-link{
+  overflow:hidden; display:flex; align-items:baseline; gap:16px;
+}
+.nav-overlay-link-index{
+  font-family:var(--font-display); font-weight:700; font-size:1rem;
+  color:rgba(255,255,255,0.35);
+  transition:color .4s var(--ease);
+}
 .nav-overlay-link-inner{
   display:block;
   font-family:var(--font-display); font-weight:700;
-  font-size:clamp(2.4rem, 7vw, 4.6rem); line-height:1.28;
+  font-size:clamp(2.1rem, 5.6vw, 3.8rem); line-height:1.28;
   color:rgba(255,255,255,0.55);
   letter-spacing:-0.02em;
   transition:color .4s var(--ease), transform .4s var(--ease), padding-left .4s var(--ease);
 }
 .nav-overlay-link:hover .nav-overlay-link-inner{
-  color:#fff; padding-left:18px;
+  color:#fff; padding-left:14px;
   background:linear-gradient(90deg, #fff, var(--cyan));
   -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
+}
+.nav-overlay-link:hover .nav-overlay-link-index{ color:var(--cyan); }
+
+.nav-overlay-preview{
+  flex:1; max-width:340px;
+  padding-left:52px; border-left:1px solid rgba(255,255,255,0.14);
+}
+.nav-overlay-preview-desc{
+  color:rgba(255,255,255,0.82); font-size:1.05rem; line-height:1.65;
+  margin:0 0 40px; min-height:5.3em;
+  transition:opacity .25s var(--ease);
+}
+.nav-overlay-preview-meta{ display:flex; flex-direction:column; gap:18px; }
+.nav-overlay-meta-item{
+  display:flex; flex-direction:column; gap:4px;
+  font-size:0.92rem; color:rgba(255,255,255,0.85);
+}
+.nav-overlay-meta-label{
+  font-size:0.7rem; font-weight:600; letter-spacing:0.06em; text-transform:uppercase;
+  color:rgba(255,255,255,0.4);
 }
 
 .nav-overlay-footer{
@@ -326,9 +331,11 @@ a:focus-visible, button:focus-visible{
 
 @media(max-width:900px){
   .header-actions .btn-primary{ display:none; }
+  .nav-overlay-preview{ display:none; }
 }
 @media(max-width:600px){
-  .nav-overlay-link-inner{ font-size:clamp(2rem, 9vw, 2.8rem); }
+  .nav-overlay-link-inner{ font-size:clamp(1.8rem, 8vw, 2.6rem); }
+  .nav-overlay-link-index{ font-size:0.8rem; }
   .nav-overlay-links{ gap:2px; }
   .nav-overlay-footer{ flex-direction:column; align-items:flex-start; }
 }
