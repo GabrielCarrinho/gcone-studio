@@ -76,6 +76,15 @@ a:focus-visible, button:focus-visible{
   border-radius:4px;
 }
 
+/* Generative WebGL background — persistent, subtle, behind everything */
+.bg-canvas{
+  position:fixed; inset:0; z-index:-1;
+  opacity:0; transition:opacity 1.2s var(--ease);
+  pointer-events:none;
+}
+.bg-canvas.is-ready{ opacity:1; }
+.bg-canvas canvas{ display:block; width:100%; height:100%; }
+
 /* subtle grain overlay for premium feel */
 .noise-overlay{
   position:fixed; inset:0; pointer-events:none; z-index:9999;
@@ -688,7 +697,7 @@ a:focus-visible, button:focus-visible{
 /* ============================================================
    Benefits
 ============================================================ */
-.benefits{ background:var(--bg-soft); }
+.benefits{ background:rgba(247,249,252,0.86); }
 .benefits-grid{
   display:grid; grid-template-columns:repeat(4, 1fr); gap:24px;
 }
@@ -800,7 +809,7 @@ a:focus-visible, button:focus-visible{
 /* ============================================================
    Portfolio — Case Study
 ============================================================ */
-.portfolio{ background:var(--bg-soft); }
+.portfolio{ background:rgba(247,249,252,0.86); }
 .section-subtext{ color:var(--text-soft); font-size:1rem; line-height:1.6; margin:14px auto 0; max-width:520px; }
 
 .case-study{
@@ -905,7 +914,7 @@ a:focus-visible, button:focus-visible{
 /* ============================================================
    Differentials
 ============================================================ */
-.differentials{ background:var(--bg-soft); }
+.differentials{ background:rgba(247,249,252,0.86); }
 
 .diff-list{
   display:grid; grid-template-columns:1fr 1fr;
@@ -970,7 +979,7 @@ a:focus-visible, button:focus-visible{
 /* ============================================================
    FAQ / Accordion
 ============================================================ */
-.faq{ background:var(--bg-soft); }
+.faq{ background:rgba(247,249,252,0.86); }
 .accordion-item{
   background:#fff; border:1px solid #EEF1F6; border-radius:var(--radius-md);
   margin-bottom:14px; overflow:hidden;
