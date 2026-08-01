@@ -221,6 +221,42 @@
   }
 
   /* ---------------------------------------------------------
+     Diferenciais — pinned horizontal scroll (desktop only).
+     On mobile this reverts automatically (gsap.matchMedia
+     handles cleanup when crossing the breakpoint), falling
+     back to the plain stacked list already styled in CSS.
+  --------------------------------------------------------- */
+  if (window.gsap && window.ScrollTrigger) {
+    const mm = gsap.matchMedia();
+    mm.add('(min-width: 900px)', () => {
+      const wrapper = document.getElementById('diffPinWrapper');
+      const track = document.getElementById('diffTrack');
+      if (!wrapper || !track) return;
+
+      const getScrollDistance = () => Math.max(0, track.scrollWidth - wrapper.offsetWidth);
+
+      const tween = gsap.to(track, {
+        x: () => -getScrollDistance(),
+        ease: 'none',
+        scrollTrigger: {
+          trigger: wrapper,
+          start: 'top top',
+          end: () => '+=' + getScrollDistance(),
+          scrub: 0.8,
+          pin: true,
+          invalidateOnRefresh: true
+        }
+      });
+
+      return () => {
+        if (tween.scrollTrigger) tween.scrollTrigger.kill();
+        tween.kill();
+        gsap.set(track, { clearProps: 'transform' });
+      };
+    });
+  }
+
+  /* ---------------------------------------------------------
      Serviços — expandable list (single row open at a time)
   --------------------------------------------------------- */
   document.querySelectorAll('.service-row').forEach(row => {
