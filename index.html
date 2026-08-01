@@ -56,34 +56,49 @@
       <img src="images/logo-transparent.png" alt="GC One" class="logo-img">
     </a>
 
-    <nav class="main-nav" id="mainNav">
-      <a href="#inicio" class="nav-link active">Início</a>
-      <a href="#servicos" class="nav-link">Serviços</a>
-      <a href="#portfolio" class="nav-link">Portfólio</a>
-      <a href="#processo" class="nav-link">Processo</a>
-      <a href="#contato" class="nav-link">Contato</a>
-    </nav>
-
     <div class="header-actions">
       <a href="orcamento.html" class="btn btn-primary btn-sm">
         <span>Solicitar Orçamento</span>
       </a>
-      <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false">
-        <span></span><span></span><span></span>
+      <button class="menu-trigger" id="menuTrigger" aria-label="Abrir menu" aria-expanded="false" aria-controls="navOverlay">
+        <span class="menu-trigger-line"></span>
+        <span class="menu-trigger-line"></span>
+        <span class="menu-trigger-label">Menu</span>
       </button>
     </div>
   </div>
-
-  <!-- Mobile nav drawer -->
-  <div class="mobile-nav" id="mobileNav">
-    <a href="#inicio" class="nav-link">Início</a>
-    <a href="#servicos" class="nav-link">Serviços</a>
-    <a href="#portfolio" class="nav-link">Portfólio</a>
-    <a href="#processo" class="nav-link">Processo</a>
-    <a href="#contato" class="nav-link">Contato</a>
-    <a href="orcamento.html" class="btn btn-primary">Solicitar Orçamento</a>
-  </div>
 </header>
+
+<!-- ============ FULL-SCREEN NAV OVERLAY ============ -->
+<div class="nav-overlay" id="navOverlay" aria-hidden="true">
+  <div class="nav-overlay-mesh" aria-hidden="true"></div>
+  <div class="container nav-overlay-inner">
+    <div class="nav-overlay-top">
+      <a href="#inicio" class="logo nav-overlay-logo">
+        <img src="images/logo-bw.png" alt="GC One" class="logo-img">
+      </a>
+      <button class="nav-overlay-close" id="navOverlayClose" aria-label="Fechar menu">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <nav class="nav-overlay-links">
+      <a href="#inicio" class="nav-overlay-link"><span class="nav-overlay-link-inner">Início</span></a>
+      <a href="#servicos" class="nav-overlay-link"><span class="nav-overlay-link-inner">Serviços</span></a>
+      <a href="#portfolio" class="nav-overlay-link"><span class="nav-overlay-link-inner">Portfólio</span></a>
+      <a href="#processo" class="nav-overlay-link"><span class="nav-overlay-link-inner">Processo</span></a>
+      <a href="#contato" class="nav-overlay-link"><span class="nav-overlay-link-inner">Contato</span></a>
+    </nav>
+
+    <div class="nav-overlay-footer">
+      <a href="orcamento.html" class="btn btn-white">Solicitar Orçamento</a>
+      <div class="nav-overlay-social">
+        <a href="https://wa.me/5512991415548" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="https://www.instagram.com/gcone.studio/" target="_blank" rel="noopener">Instagram</a>
+      </div>
+    </div>
+  </div>
+</div>
 
 <main>
 
